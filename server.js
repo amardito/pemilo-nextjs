@@ -28,5 +28,7 @@ if (fs.existsSync(publicDir) && !fs.existsSync(standalonePubicDir)) {
   fs.cpSync(publicDir, standalonePubicDir, { recursive: true });
 }
 
-console.log('Starting Next.js standalone server...');
+// Set PORT environment variable for Railway
+process.env.PORT = process.env.PORT || '3000';
+console.log(`Starting Next.js standalone server on port ${process.env.PORT}...`);
 require('./.next/standalone/server.js');
