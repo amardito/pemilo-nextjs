@@ -9,16 +9,15 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { Trash2, Plus, Image as ImageIcon, ArrowLeft, ArrowRight, Save, Check } from 'lucide-react';
-import { Room, Candidate, RoomType, SubCandidate } from '../../types';
-import { createRoom } from '../data/store';
-import { View } from '../../App';
+import { Room, Candidate, RoomType, SubCandidate } from '@/types';
+import { createRoom } from '@/lib/actions';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-interface CreateRoomProps {
-  onNavigate: (view: View) => void;
-}
+interface CreateRoomProps {}
 
-export function CreateRoom({ onNavigate }: CreateRoomProps) {
+export function CreateRoom({}: CreateRoomProps) {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<Partial<Room>>({
     name: '',
@@ -39,7 +38,7 @@ export function CreateRoom({ onNavigate }: CreateRoomProps) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     // Validation could go here
     const newRoom: Room = {
       ...formData as Room,
@@ -47,9 +46,9 @@ export function CreateRoom({ onNavigate }: CreateRoomProps) {
       createdAt: new Date().toISOString(),
       ticketsUsed: 0,
     };
-    createRoom(newRoom);
+    await createRoom(newRoom);
     toast.success("Room created successfully!");
-    onNavigate('admin-rooms');
+    router.push('/admin/rooms');
   };
 
   return (

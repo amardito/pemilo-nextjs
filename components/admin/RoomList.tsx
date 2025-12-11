@@ -6,27 +6,30 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Badge } from "../ui/badge";
 import { Search, MoreHorizontal, Plus } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { getRooms, deleteRoom } from '../data/store';
-import { Room } from '../../types';
-import { View } from '../../App';
+import { getRooms, deleteRoom } from '@/lib/actions';
+import { Room } from '@/types';
+import { useRouter } from 'next/navigation';
 
-interface RoomListProps {
-  onNavigate: (view: View) => void;
-  onSelectRoom: (id: string) => void;
-}
+interface RoomListProps {}
 
-export function RoomList({ onNavigate, onSelectRoom }: RoomListProps) {
+export function RoomList({}: RoomListProps) {
+  const router = useRouter();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    setRooms(getRooms());
+    const loadRooms = async () => {
+      const data = await getRooms();
+      setRooms(data);
+    };
+    loadRooms();
   }, []);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this room?")) {
-      deleteRoom(id);
-      setRooms(getRooms());
+      await deleteRoom(id);
+      const data = await getRooms();
+      setRooms(data);
     }
   };
 
@@ -39,7 +42,7 @@ export function RoomList({ onNavigate, onSelectRoom }: RoomListProps) {
           <h2 className="text-3xl font-bold tracking-tight">All Rooms</h2>
           <p className="text-muted-foreground">Manage your voting sessions here.</p>
         </div>
-        <Button onClick={() => onNavigate('admin-create-room')}>
+        <Button onClick={() => router.push('/admin/create')}>
           <Plus className="mr-2 h-4 w-4" /> Create Room
         </Button>
       </div>
@@ -74,7 +77,7 @@ export function RoomList({ onNavigate, onSelectRoom }: RoomListProps) {
             <TableBody>
               {filteredRooms.map((room) => (
                 <TableRow key={room.id}>
-                  <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => onSelectRoom(room.id)}>
+                  <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => router.push(`/admin/room/${room.id}`)}>
                     {room.name}
                   </TableCell>
                   <TableCell className="capitalize">{room.type.replace('_', ' ')}</TableCell>
@@ -97,7 +100,7 @@ export function RoomList({ onNavigate, onSelectRoom }: RoomListProps) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => onSelectRoom(room.id)}>View Details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push(`/admin/room/${room.id}`)}>View Details</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => alert("Edit not implemented in demo")}>Edit</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(room.id)}>Delete</DropdownMenuItem>
                       </DropdownMenuContent>

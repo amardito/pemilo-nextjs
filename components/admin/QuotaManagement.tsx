@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Progress } from "../ui/progress";
-import { getStats } from '../data/store';
-import { Stats } from '../../types';
+import { getStats } from '@/lib/actions';
+import { Stats } from '@/types';
 
 export function QuotaManagement() {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
-    setStats(getStats());
+    const loadStats = async () => {
+      const data = await getStats();
+      setStats(data);
+    };
+    loadStats();
   }, []);
 
   if (!stats) return <div>Loading...</div>;

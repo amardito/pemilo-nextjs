@@ -4,22 +4,26 @@ import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Badge } from "../ui/badge";
 import { Plus, Users, Layout, Clock, BarChart3, ArrowRight } from 'lucide-react';
-import { getStats, getRooms } from '../data/store';
-import { Stats, Room } from '../../types';
+import { getStats, getRooms } from '@/lib/actions';
+import { Stats, Room } from '@/types';
 import { LiveVotingGraph } from '../common/LiveVotingGraph';
-import { View } from '../../App';
+import { useRouter } from 'next/navigation';
 
-interface DashboardProps {
-  onNavigate: (view: View) => void;
-}
+interface DashboardProps {}
 
-export function AdminDashboard({ onNavigate }: DashboardProps) {
+export function AdminDashboard({}: DashboardProps) {
+  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentRooms, setRecentRooms] = useState<Room[]>([]);
 
   useEffect(() => {
-    setStats(getStats());
-    setRecentRooms(getRooms().slice(0, 5)); // Get first 5
+    const loadData = async () => {
+      const statsData = await getStats();
+      const roomsData = await getRooms();
+      setStats(statsData);
+      setRecentRooms(roomsData.slice(0, 5));
+    };
+    loadData();
   }, []);
 
   if (!stats) return <div className="p-8">Loading...</div>;
@@ -79,7 +83,7 @@ export function AdminDashboard({ onNavigate }: DashboardProps) {
             <Plus className="h-4 w-4 text-primary-foreground/70" />
           </CardHeader>
           <CardContent>
-            <Button variant="secondary" className="w-full" onClick={() => onNavigate('admin-create-room')}>
+            <Button variant="secondary" className="w-full" onClick={() => router.push('/admin/create')}>
               Create New Room
             </Button>
           </CardContent>
@@ -122,7 +126,7 @@ export function AdminDashboard({ onNavigate }: DashboardProps) {
                   </Badge>
                 </div>
               ))}
-              <Button variant="ghost" className="w-full text-xs" onClick={() => onNavigate('admin-rooms')}>
+              <Button variant="ghost" className="w-full text-xs" onClick={() => router.push('/admin/rooms')}>
                 View all rooms <ArrowRight className="ml-2 h-3 w-3" />
               </Button>
             </div>

@@ -6,42 +6,50 @@ import { Separator } from "../ui/separator";
 import { Progress } from "../ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ArrowLeft, Play, Square, Download, Copy, Share2, Users, Ticket } from 'lucide-react';
-import { getRoom, updateRoom } from '../data/store';
-import { Room } from '../../types';
+import { getRoom, updateRoom } from '@/lib/actions';
+import { Room } from '@/types';
 import { LiveVotingGraph } from '../common/LiveVotingGraph';
-import { View } from '../../App';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface RoomDetailProps {
   roomId: string | null;
-  onNavigate: (view: View) => void;
 }
 
-export function RoomDetail({ roomId, onNavigate }: RoomDetailProps) {
+export function RoomDetail({ roomId }: RoomDetailProps) {
+  const router = useRouter();
   const [room, setRoom] = useState<Room | undefined>(undefined);
   const [refreshKey, setRefreshKey] = useState(0); // Trigger graph refresh
 
   useEffect(() => {
-    if (roomId) {
-      setRoom(getRoom(roomId));
-    }
+    const loadRoom = async () => {
+      if (roomId) {
+        const data = await getRoom(roomId);
+        setRoom(data);
+      }
+    };
+    loadRoom();
   }, [roomId, refreshKey]);
 
   // Simulate live updates
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
        setRefreshKey(k => k + 1);
-       if (roomId) setRoom(getRoom(roomId)); // Re-fetch to get new votes
+       if (roomId) {
+         const data = await getRoom(roomId);
+         setRoom(data);
+       }
     }, 5000);
     return () => clearInterval(interval);
   }, [roomId]);
 
   if (!room) return <div>Room not found</div>;
 
-  const handleStatusChange = (status: Room['status']) => {
-    const updated = updateRoom(room.id, { status });
-    if (updated) setRoom(updated);
-    toast.success(`Room status changed to ${status}`);
+  const handleStatusChange = async (newStatus: 'draft' | 'published' | 'closed') => {
+    if (!room) return;
+    await updateRoom(room.id, { status: newStatus });
+    setRefreshKey(k => k + 1);
+    toast.success(`Room status updated to ${newStatus}`);
   };
 
   const totalVotes = room.candidates.reduce((acc, c) => acc + c.voteCount, 0);
@@ -51,7 +59,7 @@ export function RoomDetail({ roomId, onNavigate }: RoomDetailProps) {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-start gap-4">
-          <Button variant="ghost" size="icon" onClick={() => onNavigate('admin-rooms')}>
+          <Button variant="ghost" size="icon" onClick={() => router.push('/admin/rooms')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>

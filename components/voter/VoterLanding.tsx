@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ArrowRight, Vote } from 'lucide-react';
-import { getRooms } from '../data/store';
+import { getRooms } from '@/lib/actions';
 
 interface VoterLandingProps {
   onJoinRoom: (roomId: string) => void;
@@ -11,7 +11,15 @@ interface VoterLandingProps {
 
 export function VoterLanding({ onJoinRoom }: VoterLandingProps) {
   const [inputRoomId, setInputRoomId] = useState('');
-  const rooms = getRooms().filter(r => r.status === 'published');
+  const [rooms, setRooms] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadRooms = async () => {
+      const data = await getRooms();
+      setRooms(data.filter((r: any) => r.status === 'published'));
+    };
+    loadRooms();
+  }, []);
 
   return (
     <div className="max-w-md mx-auto space-y-8 py-12">

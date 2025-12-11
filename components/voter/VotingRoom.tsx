@@ -7,8 +7,8 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { getRoom, submitVote } from '../data/store';
-import { Room, Candidate } from '../../types';
+import { getRoom, submitVote } from '@/lib/actions';
+import { Room, Candidate } from '@/types';
 import { toast } from 'sonner';
 
 interface VotingRoomProps {
@@ -28,14 +28,17 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    if (roomId) {
-      const r = getRoom(roomId);
-      setRoom(r);
-      // Auto-grant access if not ticket-based
-      if (r && r.type !== 'custom_tickets') {
-        setHasAccess(true);
+    const loadRoom = async () => {
+      if (roomId) {
+        const r = await getRoom(roomId);
+        setRoom(r);
+        // Auto-grant access if not ticket-based
+        if (r && r.type !== 'custom_tickets') {
+          setHasAccess(true);
+        }
       }
-    }
+    };
+    loadRoom();
   }, [roomId]);
 
   if (!room) return <div className="p-8 text-center">Room not found. <Button variant="link" onClick={onExit}>Go Home</Button></div>;
@@ -50,9 +53,9 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
     }
   };
 
-  const handleSubmitVote = () => {
+  const handleSubmitVote = async () => {
     if (selectedCandidate && roomId) {
-      const success = submitVote(roomId, selectedCandidate);
+      const success = await submitVote(roomId, selectedCandidate);
       if (success) {
         setIsSuccess(true);
         setIsConfirmOpen(false);

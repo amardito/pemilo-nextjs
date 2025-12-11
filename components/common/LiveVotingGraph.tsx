@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Activity } from 'lucide-react';
-import { Candidate } from '../../types';
+import { Candidate } from '@/types';
 
 interface LiveVotingGraphProps {
   candidates: Candidate[];
