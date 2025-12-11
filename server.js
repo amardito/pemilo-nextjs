@@ -1,4 +1,3 @@
-const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,42 +20,9 @@ if (fs.existsSync(publicSource)) {
   console.log('✓ Public files copied');
 }
 
+// Set environment for standalone server
+process.env.HOSTNAME = process.env.HOSTNAME || '0.0.0.0';
+
 // Start the Next.js standalone server
 console.log('Starting Next.js standalone server...');
-
-const port = process.env.PORT || 3000;
-const hostname = process.env.HOSTNAME || '0.0.0.0';
-
-// Set environment variables for the Next.js server
-process.env.PORT = port;
-process.env.HOSTNAME = hostname;
-
-const server = spawn('node', ['.next/standalone/server.js'], {
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    PORT: port,
-    HOSTNAME: hostname,
-  }
-});
-
-server.on('error', (error) => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-});
-
-server.on('exit', (code) => {
-  console.log(`Server exited with code ${code}`);
-  process.exit(code);
-});
-
-// Handle shutdown gracefully
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  server.kill('SIGTERM');
-});
-
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully...');
-  server.kill('SIGINT');
-});
+require('./.next/standalone/server.js');
