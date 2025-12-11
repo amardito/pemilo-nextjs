@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -77,6 +77,8 @@ export function CreateRoom({}: CreateRoomProps) {
   const [loading, setLoading] = useState(false);
   const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [showTicketDialog, setShowTicketDialog] = useState(false);
+  const [quota, setQuota] = useState<any>(null);
+  const [quotaLoading, setQuotaLoading] = useState(true);
   
   // Generate random placeholder on component mount
   const randomPlaceholder = useMemo(() => getRandomPlaceholder(), []);
@@ -95,6 +97,25 @@ export function CreateRoom({}: CreateRoomProps) {
     description: '',
     sub_candidates: []
   });
+
+  // Fetch quota on mount
+  useEffect(() => {
+    const fetchQuota = async () => {
+      if (!token) return;
+      try {
+        api.setToken(token);
+        const quotaData = await api.getQuota();
+        setQuota(quotaData);
+      } catch (error) {
+      } finally {
+        setQuotaLoading(false);
+      }
+    };
+
+    fetchQuota();
+  }, [token]);
+
+  const isQuotaExceeded = quota && quota.current_rooms >= quota.room_limit;
 
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
@@ -200,7 +221,6 @@ export function CreateRoom({}: CreateRoomProps) {
         router.push(`/admin/room/${room.id}`);
       }
     } catch (error) {
-      console.error('Error creating room:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create room');
     } finally {
       setLoading(false);
@@ -251,6 +271,32 @@ export function CreateRoom({}: CreateRoomProps) {
           )}
           {step === 3 && <Step3Review roomData={roomData} candidates={candidates} />}
         </CardContent>
+
+        {/* Quota Warning */}
+        {step === 3 && quota && (
+          <div className="px-6 py-4 border-t bg-muted/40">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="font-medium">Room Quota Usage</span>
+                <span className="text-muted-foreground">{quota.current_rooms} of {quota.room_limit} rooms</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                <div 
+                  className={`h-full transition-all ${quota.current_rooms >= quota.room_limit ? 'bg-destructive' : 'bg-primary'}`}
+                  style={{ width: `${Math.min((quota.current_rooms / quota.room_limit) * 100, 100)}%` }}
+                />
+              </div>
+              {isQuotaExceeded && (
+                <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20">
+                  <p className="text-sm text-destructive font-medium">
+                    ⚠️ You have reached your room quota limit. Contact your administrator to increase your limit.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <CardFooter className="flex justify-between">
           <Button variant="outline" onClick={handleBack} disabled={step === 1}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back
@@ -261,7 +307,7 @@ export function CreateRoom({}: CreateRoomProps) {
               Next <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleCreate} disabled={loading || !roomData.name}>
+            <Button onClick={handleCreate} disabled={loading || !roomData.name || isQuotaExceeded}>
               {loading ? 'Creating...' : 'Create Room'} <Save className="ml-2 h-4 w-4" />
             </Button>
           )}

@@ -5,8 +5,8 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 // Helper to set token from cookies
-function setTokenFromCookies() {
-  const cookieStore = cookies();
+async function setTokenFromCookies() {
+  const cookieStore = await cookies();
   const token = cookieStore.get('auth_token')?.value;
   if (token) {
     api.setToken(token);
@@ -27,7 +27,7 @@ export async function login(username: string, encryptedPassword: string) {
 // Get admin quota
 export async function getQuota() {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const quota = await api.getQuota();
     console.log('[getQuota] Response:', quota);
     return quota;
@@ -47,7 +47,7 @@ export async function getQuota() {
 // Get all rooms
 export async function getRooms(filters?: { status?: string; publish_state?: string; session_state?: string }) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const response = await api.getRooms(filters);
     return response.rooms || [];
   } catch (error) {
@@ -59,7 +59,7 @@ export async function getRooms(filters?: { status?: string; publish_state?: stri
 // Get single room
 export async function getRoom(id: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const room = await api.getRoom(id);
     return room;
   } catch (error) {
@@ -71,7 +71,7 @@ export async function getRoom(id: string) {
 // Create room
 export async function createRoom(data: any) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const room = await api.createRoom(data);
     
     revalidatePath('/admin');
@@ -88,7 +88,7 @@ export async function createRoom(data: any) {
 // Update room
 export async function updateRoom(id: string, updates: any) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const room = await api.updateRoom(id, updates);
     
     revalidatePath('/admin');
@@ -106,7 +106,7 @@ export async function updateRoom(id: string, updates: any) {
 // Delete room
 export async function deleteRoom(id: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     await api.deleteRoom(id);
     
     revalidatePath('/admin');
@@ -121,7 +121,7 @@ export async function deleteRoom(id: string) {
 // Get candidates for a room
 export async function getCandidates(roomId: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const response = await api.getCandidates(roomId);
     return response.candidates || [];
   } catch (error) {
@@ -133,7 +133,7 @@ export async function getCandidates(roomId: string) {
 // Get single candidate
 export async function getCandidate(candidateId: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const candidate = await api.getCandidate(candidateId);
     return candidate;
   } catch (error) {
@@ -145,7 +145,7 @@ export async function getCandidate(candidateId: string) {
 // Create candidate
 export async function createCandidate(data: any) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const candidate = await api.createCandidate(data);
     revalidatePath('/admin');
     return candidate;
@@ -158,7 +158,7 @@ export async function createCandidate(data: any) {
 // Update candidate
 export async function updateCandidate(candidateId: string, data: any) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const candidate = await api.updateCandidate(candidateId, data);
     revalidatePath('/admin');
     return candidate;
@@ -171,7 +171,7 @@ export async function updateCandidate(candidateId: string, data: any) {
 // Delete candidate
 export async function deleteCandidate(candidateId: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     await api.deleteCandidate(candidateId);
     revalidatePath('/admin');
   } catch (error) {
@@ -183,7 +183,7 @@ export async function deleteCandidate(candidateId: string) {
 // Create ticket
 export async function createTicket(roomId: string, ticketCode?: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const ticket = await api.createTicket(roomId, ticketCode);
     revalidatePath('/admin');
     return ticket;
@@ -196,7 +196,7 @@ export async function createTicket(roomId: string, ticketCode?: string) {
 // Create bulk tickets
 export async function createBulkTickets(roomId: string, ticketCodes: string[]) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const response = await api.createBulkTickets(roomId, ticketCodes);
     revalidatePath('/admin');
     return response;
@@ -209,7 +209,7 @@ export async function createBulkTickets(roomId: string, ticketCodes: string[]) {
 // Get tickets for a room
 export async function getTickets(roomId: string, filters?: { used?: boolean }) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     const response = await api.getTickets(roomId, filters);
     return response.tickets || [];
   } catch (error) {
@@ -221,7 +221,7 @@ export async function getTickets(roomId: string, filters?: { used?: boolean }) {
 // Delete ticket
 export async function deleteTicket(ticketId: string) {
   try {
-    setTokenFromCookies();
+    await setTokenFromCookies();
     await api.deleteTicket(ticketId);
     revalidatePath('/admin');
   } catch (error) {

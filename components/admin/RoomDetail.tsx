@@ -6,7 +6,7 @@ import { Separator } from "../ui/separator";
 import { Progress } from "../ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { ArrowLeft, Play, Square, Download, Copy, Share2, Users, Ticket, Pencil } from 'lucide-react';
+import { ArrowLeft, Play, Square, Download, Copy, Share2, Users, Ticket, Pencil, Plus } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { LiveVotingGraph } from '../common/LiveVotingGraph';
@@ -60,7 +60,6 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
         setRoom(roomResponse);
         setCandidates(candidatesResponse.candidates || []);
       } catch (error) {
-        console.error('Failed to load room:', error);
         toast.error('Failed to load room details');
       } finally {
         setLoading(false);
@@ -83,7 +82,6 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
       setRoom({ ...room, publish_state: newState });
       toast.success(`Room ${newState}`);
     } catch (error) {
-      console.error('Error updating room:', error);
       toast.error('Failed to update room');
     }
   };
@@ -96,7 +94,6 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
       setRoom({ ...room, session_state: newState });
       toast.success(`Session ${newState}`);
     } catch (error) {
-      console.error('Error updating session state:', error);
       toast.error('Failed to update session state');
     }
   };
@@ -265,6 +262,32 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
                )}
              </CardContent>
           </Card>
+
+          {room.voters_type === 'custom_tickets' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Ticket Management</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-xs text-muted-foreground">Generate voting tickets for this room</p>
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => router.push(`/admin/room/${room.id}/tickets/single`)}
+                  >
+                    <Plus className="mr-2 h-4 w-4" /> Single Ticket
+                  </Button>
+                  <Button 
+                    className="w-full justify-start bg-primary hover:bg-primary/90"
+                    onClick={() => router.push(`/admin/room/${room.id}/tickets/bulk`)}
+                  >
+                    <Plus className="mr-2 h-4 w-4" /> Bulk Tickets
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
              <CardHeader>

@@ -39,7 +39,6 @@ export function QuotaManagement() {
         const data = await api.getQuota();
         setQuota(data);
       } catch (err) {
-        console.error('Error loading quota:', err);
         setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);

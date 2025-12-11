@@ -27,17 +27,13 @@ async function fetchApi<T>(
   };
 
   try {
-    console.log(`[fetchApi] ${options.method || 'GET'} ${url}`);
-    console.log(`[fetchApi] Token: ${authToken ? 'Present' : 'Missing'}`);
-    
     const response = await fetch(url, config);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error(`[fetchApi] Error response:`, errorData);
       throw new ApiError(
         response.status,
-        errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`
       );
     }
 
@@ -45,11 +41,9 @@ async function fetchApi<T>(
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json();
-      console.log(`[fetchApi] Success response:`, data);
       return data;
     }
 
-    console.log(`[fetchApi] Empty response`);
     return {} as T;
   } catch (error) {
     if (error instanceof ApiError) {
@@ -149,13 +143,16 @@ export const api = {
   createTicket: (roomId: string, ticketCode?: string) =>
     fetchApi<any>('/admin/tickets', {
       method: 'POST',
-      body: JSON.stringify({ room_id: roomId, ...(ticketCode && { ticket_code: ticketCode }) }),
+      body: JSON.stringify({ 
+        room_id: roomId,
+        ...(ticketCode ? { code: ticketCode } : {}) // Only include code if provided
+      }),
     }),
 
   createBulkTickets: (roomId: string, ticketCodes: string[]) =>
     fetchApi<any>('/admin/tickets/bulk', {
       method: 'POST',
-      body: JSON.stringify({ room_id: roomId, ticket_codes: ticketCodes }),
+      body: JSON.stringify({ room_id: roomId, codes: ticketCodes }),
     }),
 
   getTickets: (roomId: string, filters?: { used?: boolean }) => {
@@ -164,6 +161,14 @@ export const api = {
     const query = params.toString() ? `?${params.toString()}` : '';
     return fetchApi<any>(`/admin/tickets/room/${roomId}${query}`);
   },
+
+  getTicketCounts: (roomId: string) =>
+    fetchApi<{
+      room_id: string;
+      total_count: number;
+      used_count: number;
+      unused_count: number;
+    }>(`/admin/tickets/counts/room/${roomId}`),
 
   deleteTicket: (ticketId: string) =>
     fetchApi<void>(`/admin/tickets/${ticketId}`, {

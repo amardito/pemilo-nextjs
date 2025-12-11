@@ -53,19 +53,15 @@ export function AdminDashboard({}: DashboardProps) {
           throw new Error('Not authenticated');
         }
         
-        console.log('Loading quota data...');
         api.setToken(token);
         const quotaData = await api.getQuota();
-        console.log('Quota data received:', quotaData);
         
         const roomsResponse = await api.getRooms();
         const roomsData = roomsResponse.rooms || [];
-        console.log('Rooms data received:', roomsData);
         
         setQuota(quotaData);
         setRecentRooms(roomsData.slice(0, 5));
       } catch (error) {
-        console.error('Error loading dashboard data:', error);
         const errorMsg = error instanceof Error ? error.message : String(error);
         setError(errorMsg);
       } finally {

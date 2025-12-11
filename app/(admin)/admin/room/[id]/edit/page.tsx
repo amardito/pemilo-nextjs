@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Save, Plus, Users } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Room {
@@ -27,7 +27,7 @@ interface Room {
 export default function EditRoomPage() {
   const params = useParams();
   const router = useRouter();
-  const { token, authLoading } = useAuth();
+  const { token, loading: authLoading } = useAuth();
   const roomId = params.id as string;
 
   const [room, setRoom] = useState<Room | null>(null);
@@ -135,14 +135,14 @@ export default function EditRoomPage() {
               </div>
             </div>
 
-            {room.voters_type === 'custom_tickets' && (
+            {room.voters_type !== 'custom_tickets' && (
               <div className="space-y-2">
                 <Label htmlFor="voters_limit">Voter Limit</Label>
                 <Input
                   id="voters_limit"
                   type="number"
                   value={formData.voters_limit || ''}
-                  onChange={(e) => handleChange('voters_limit', parseInt(e.target.value) || undefined)}
+                  onChange={(e) => handleChange('voters_limit', Number.parseInt(e.target.value) || undefined)}
                   placeholder="Max number of voters"
                 />
               </div>
@@ -175,35 +175,6 @@ export default function EditRoomPage() {
                   value={formData.session_end_time?.slice(0, 16) || ''}
                   onChange={(e) => handleChange('session_end_time', e.target.value)}
                 />
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {room.voters_type === 'custom_tickets' && (
-          <Card className="border-blue-200 bg-blue-50">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
-                Ticket Management
-              </CardTitle>
-              <CardDescription>
-                Manage voting tickets for this room
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Generate and manage voting tickets for voters. You can create tickets individually or in bulk.
-              </p>
-              <div className="flex gap-3">
-                <Button variant="outline" className="text-xs">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Generate Single Ticket
-                </Button>
-                <Button variant="outline" className="text-xs">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Generate Tickets in Bulk
-                </Button>
               </div>
             </CardContent>
           </Card>

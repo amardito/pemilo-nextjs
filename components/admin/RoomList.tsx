@@ -49,7 +49,6 @@ export function RoomList({}: RoomListProps) {
         const response = await api.getRooms();
         setRooms(response.rooms || []);
       } catch (error) {
-        console.error('Error loading rooms:', error);
       } finally {
         setLoading(false);
       }
@@ -72,7 +71,6 @@ export function RoomList({}: RoomListProps) {
       setDeleteDialogOpen(false);
       setRoomToDelete(null);
     } catch (error) {
-      console.error('Error deleting room:', error);
     }
   };
 
@@ -104,7 +102,6 @@ export function RoomList({}: RoomListProps) {
       setSelectedRoomIds(new Set());
       setBulkDeleteDialogOpen(false);
     } catch (error) {
-      console.error('Error deleting rooms:', error);
     }
   };
 
@@ -116,7 +113,6 @@ export function RoomList({}: RoomListProps) {
       const response = await api.getRooms();
       setRooms(response.rooms || []);
     } catch (error) {
-      console.error('Error updating room:', error);
     }
   };
 
