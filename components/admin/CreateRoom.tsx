@@ -536,7 +536,7 @@ function Step2Candidates({
           </div>
         ) : (
           <div className="space-y-4">
-            {candidates.map((candidate, index) => (
+            {candidates.map((candidate: CandidateFormData, index) => (
               <Card key={index} className="relative shadow-md hover:shadow-lg transition-shadow border-l-4 border-l-primary">
                 {/* Candidate Number Badge */}
                 <div className="absolute -top-3 -left-3 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm shadow-md z-10">
