@@ -2,12 +2,54 @@
 
 import { api } from "./api-client";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+
+// Helper to set token from cookies
+function setTokenFromCookies() {
+  const cookieStore = cookies();
+  const token = cookieStore.get('auth_token')?.value;
+  if (token) {
+    api.setToken(token);
+  }
+}
+
+// Authentication
+export async function login(username: string, encryptedPassword: string) {
+  try {
+    const response = await api.login(username, encryptedPassword);
+    return response;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
+}
+
+// Get admin quota
+export async function getQuota() {
+  try {
+    setTokenFromCookies();
+    const quota = await api.getQuota();
+    console.log('[getQuota] Response:', quota);
+    return quota;
+  } catch (error) {
+    console.error('[getQuota] Error fetching quota:', error);
+    if (error instanceof Error) {
+      console.error('[getQuota] Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+    }
+    throw error;
+  }
+}
 
 // Get all rooms
-export async function getRooms() {
+export async function getRooms(filters?: { status?: string; publish_state?: string; session_state?: string }) {
   try {
-    const rooms = await api.getRooms();
-    return rooms;
+    setTokenFromCookies();
+    const response = await api.getRooms(filters);
+    return response.rooms || [];
   } catch (error) {
     console.error('Error fetching rooms:', error);
     return [];
@@ -17,6 +59,7 @@ export async function getRooms() {
 // Get single room
 export async function getRoom(id: string) {
   try {
+    setTokenFromCookies();
     const room = await api.getRoom(id);
     return room;
   } catch (error) {
@@ -28,6 +71,7 @@ export async function getRoom(id: string) {
 // Create room
 export async function createRoom(data: any) {
   try {
+    setTokenFromCookies();
     const room = await api.createRoom(data);
     
     revalidatePath('/admin');
@@ -44,6 +88,7 @@ export async function createRoom(data: any) {
 // Update room
 export async function updateRoom(id: string, updates: any) {
   try {
+    setTokenFromCookies();
     const room = await api.updateRoom(id, updates);
     
     revalidatePath('/admin');
@@ -61,6 +106,7 @@ export async function updateRoom(id: string, updates: any) {
 // Delete room
 export async function deleteRoom(id: string) {
   try {
+    setTokenFromCookies();
     await api.deleteRoom(id);
     
     revalidatePath('/admin');
@@ -72,35 +118,163 @@ export async function deleteRoom(id: string) {
   }
 }
 
-// Get stats
-export async function getStats() {
+// Get candidates for a room
+export async function getCandidates(roomId: string) {
   try {
-    const stats = await api.getStats();
-    return stats;
+    setTokenFromCookies();
+    const response = await api.getCandidates(roomId);
+    return response.candidates || [];
   } catch (error) {
-    console.error('Error fetching stats:', error);
-    return {
-      totalRoomQuota: 50,
-      roomsCreated: 0,
-      totalVoterQuota: 1000,
-      votersUsed: 0,
-      activeRooms: 0
-    };
+    console.error('Error fetching candidates:', error);
+    return [];
   }
 }
 
-// Submit vote
+// Get single candidate
+export async function getCandidate(candidateId: string) {
+  try {
+    setTokenFromCookies();
+    const candidate = await api.getCandidate(candidateId);
+    return candidate;
+  } catch (error) {
+    console.error('Error fetching candidate:', error);
+    return null;
+  }
+}
+
+// Create candidate
+export async function createCandidate(data: any) {
+  try {
+    setTokenFromCookies();
+    const candidate = await api.createCandidate(data);
+    revalidatePath('/admin');
+    return candidate;
+  } catch (error) {
+    console.error('Error creating candidate:', error);
+    throw error;
+  }
+}
+
+// Update candidate
+export async function updateCandidate(candidateId: string, data: any) {
+  try {
+    setTokenFromCookies();
+    const candidate = await api.updateCandidate(candidateId, data);
+    revalidatePath('/admin');
+    return candidate;
+  } catch (error) {
+    console.error('Error updating candidate:', error);
+    throw error;
+  }
+}
+
+// Delete candidate
+export async function deleteCandidate(candidateId: string) {
+  try {
+    setTokenFromCookies();
+    await api.deleteCandidate(candidateId);
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error('Error deleting candidate:', error);
+    throw error;
+  }
+}
+
+// Create ticket
+export async function createTicket(roomId: string, ticketCode?: string) {
+  try {
+    setTokenFromCookies();
+    const ticket = await api.createTicket(roomId, ticketCode);
+    revalidatePath('/admin');
+    return ticket;
+  } catch (error) {
+    console.error('Error creating ticket:', error);
+    throw error;
+  }
+}
+
+// Create bulk tickets
+export async function createBulkTickets(roomId: string, ticketCodes: string[]) {
+  try {
+    setTokenFromCookies();
+    const response = await api.createBulkTickets(roomId, ticketCodes);
+    revalidatePath('/admin');
+    return response;
+  } catch (error) {
+    console.error('Error creating bulk tickets:', error);
+    throw error;
+  }
+}
+
+// Get tickets for a room
+export async function getTickets(roomId: string, filters?: { used?: boolean }) {
+  try {
+    setTokenFromCookies();
+    const response = await api.getTickets(roomId, filters);
+    return response.tickets || [];
+  } catch (error) {
+    console.error('Error fetching tickets:', error);
+    return [];
+  }
+}
+
+// Delete ticket
+export async function deleteTicket(ticketId: string) {
+  try {
+    setTokenFromCookies();
+    await api.deleteTicket(ticketId);
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error('Error deleting ticket:', error);
+    throw error;
+  }
+}
+
+// Get voting room info (public)
+export async function getVotingRoom(roomId: string) {
+  try {
+    const response = await api.getVotingRoom(roomId);
+    return response;
+  } catch (error) {
+    console.error('Error fetching voting room:', error);
+    return null;
+  }
+}
+
+// Verify ticket (public)
+export async function verifyTicket(roomId: string, ticketCode: string) {
+  try {
+    const response = await api.verifyTicket(roomId, ticketCode);
+    return response;
+  } catch (error) {
+    console.error('Error verifying ticket:', error);
+    throw error;
+  }
+}
+
+// Submit vote (public)
 export async function submitVote(roomId: string, candidateId: string, additionalData?: any) {
   try {
-    await api.submitVote(roomId, candidateId, additionalData);
+    const vote = await api.submitVote(roomId, candidateId, additionalData);
     
     revalidatePath('/admin');
     revalidatePath(`/admin/room/${roomId}`);
     revalidatePath(`/voter/room/${roomId}`);
     
-    return true;
+    return vote;
   } catch (error) {
     console.error('Error submitting vote:', error);
-    return false;
+    throw error;
+  }
+}
+
+// Get realtime voting statistics
+export async function getRealtimeStats(roomId: string) {
+  try {
+    const stats = await api.getRealtimeStats(roomId);
+    return stats;
+  } catch (error) {
+    console.error('Error fetching realtime stats:', error);
+    return null;
   }
 }

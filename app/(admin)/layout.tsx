@@ -6,6 +6,22 @@ import { usePathname } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, PlusCircle, List, PieChart, LogOut, Vote } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/providers/AuthProvider";
+
+function LogoutButton() {
+  const { logout } = useAuth();
+  
+  return (
+    <Button 
+      variant="destructive" 
+      className="w-full justify-start gap-3"
+      onClick={logout}
+    >
+      <LogOut className="h-4 w-4" />
+      Logout
+    </Button>
+  );
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -53,7 +69,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
 
-        <div className="p-4 border-t">
+        <div className="p-4 border-t space-y-2">
+          <LogoutButton />
           <Link href="/voter">
             <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive">
               <LogOut className="h-4 w-4" />

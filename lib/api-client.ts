@@ -1,6 +1,8 @@
-// API Client for Go REST Backend
+// API Client for Go REST Backend - Pemilo API v1
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-pemilo.amardito.info/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-pemilo.amardito.info/api/v1';
+
+let authToken: string | null = null;
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -19,15 +21,20 @@ async function fetchApi<T>(
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
       ...options.headers,
     },
   };
 
   try {
+    console.log(`[fetchApi] ${options.method || 'GET'} ${url}`);
+    console.log(`[fetchApi] Token: ${authToken ? 'Present' : 'Missing'}`);
+    
     const response = await fetch(url, config);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      console.error(`[fetchApi] Error response:`, errorData);
       throw new ApiError(
         response.status,
         errorData.message || `HTTP ${response.status}: ${response.statusText}`
@@ -37,9 +44,12 @@ async function fetchApi<T>(
     // Handle empty responses
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
-      return await response.json();
+      const data = await response.json();
+      console.log(`[fetchApi] Success response:`, data);
+      return data;
     }
 
+    console.log(`[fetchApi] Empty response`);
     return {} as T;
   } catch (error) {
     if (error instanceof ApiError) {
@@ -49,47 +59,140 @@ async function fetchApi<T>(
   }
 }
 
-// API Methods
+// API Methods - Admin Authentication
 export const api = {
+  // Authentication
+  login: (username: string, encryptedPassword: string) =>
+    fetchApi<any>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, encrypted_password: encryptedPassword }),
+    }).then(response => {
+      if (response.token) {
+        authToken = response.token;
+      }
+      return response;
+    }),
+
+  setToken: (token: string) => {
+    authToken = token;
+  },
+
+  getToken: () => authToken,
+
+  clearToken: () => {
+    authToken = null;
+  },
+
+  // Admin Quota
+  getQuota: () => fetchApi<any>('/admin/quota'),
+
   // Rooms
-  getRooms: () => fetchApi<any[]>('/rooms'),
+  getRooms: (filters?: { status?: string; publish_state?: string; session_state?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.publish_state) params.append('publish_state', filters.publish_state);
+    if (filters?.session_state) params.append('session_state', filters.session_state);
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return fetchApi<any>(`/admin/rooms${query}`);
+  },
   
-  getRoom: (id: string) => fetchApi<any>(`/rooms/${id}`),
+  getRoom: (id: string) => fetchApi<any>(`/admin/rooms/${id}`),
   
   createRoom: (data: any) => 
-    fetchApi<any>('/rooms', {
+    fetchApi<any>('/admin/rooms', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
   
   updateRoom: (id: string, data: any) =>
-    fetchApi<any>(`/rooms/${id}`, {
+    fetchApi<any>(`/admin/rooms/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
   
   deleteRoom: (id: string) =>
-    fetchApi<void>(`/rooms/${id}`, {
+    fetchApi<void>(`/admin/rooms/${id}`, {
       method: 'DELETE',
     }),
 
-  // Votes
+  deleteBulkRooms: (ids: string[]) =>
+    fetchApi<void>('/admin/rooms', {
+      method: 'DELETE',
+      body: JSON.stringify({ ids }),
+    }),
+
+  // Candidates
+  getCandidates: (roomId: string) => 
+    fetchApi<any>(`/admin/candidates/room/${roomId}`),
+
+  getCandidate: (candidateId: string) =>
+    fetchApi<any>(`/admin/candidates/${candidateId}`),
+  
+  createCandidate: (data: any) =>
+    fetchApi<any>('/admin/candidates', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateCandidate: (candidateId: string, data: any) =>
+    fetchApi<any>(`/admin/candidates/${candidateId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  deleteCandidate: (candidateId: string) =>
+    fetchApi<void>(`/admin/candidates/${candidateId}`, {
+      method: 'DELETE',
+    }),
+
+  // Tickets
+  createTicket: (roomId: string, ticketCode?: string) =>
+    fetchApi<any>('/admin/tickets', {
+      method: 'POST',
+      body: JSON.stringify({ room_id: roomId, ...(ticketCode && { ticket_code: ticketCode }) }),
+    }),
+
+  createBulkTickets: (roomId: string, ticketCodes: string[]) =>
+    fetchApi<any>('/admin/tickets/bulk', {
+      method: 'POST',
+      body: JSON.stringify({ room_id: roomId, ticket_codes: ticketCodes }),
+    }),
+
+  getTickets: (roomId: string, filters?: { used?: boolean }) => {
+    const params = new URLSearchParams();
+    if (filters?.used !== undefined) params.append('used', String(filters.used));
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return fetchApi<any>(`/admin/tickets/room/${roomId}${query}`);
+  },
+
+  deleteTicket: (ticketId: string) =>
+    fetchApi<void>(`/admin/tickets/${ticketId}`, {
+      method: 'DELETE',
+    }),
+
+  // Voting - Public Endpoints
+  getVotingRoom: (roomId: string) =>
+    fetchApi<any>(`/vote?room_id=${roomId}`),
+
+  verifyTicket: (roomId: string, ticketCode: string) =>
+    fetchApi<any>('/vote/verify-ticket', {
+      method: 'POST',
+      body: JSON.stringify({ room_id: roomId, ticket_code: ticketCode }),
+    }),
+
   submitVote: (roomId: string, candidateId: string, data?: any) =>
-    fetchApi<any>('/votes', {
+    fetchApi<any>('/vote', {
       method: 'POST',
       body: JSON.stringify({
-        roomId,
-        candidateId,
+        room_id: roomId,
+        candidate_id: candidateId,
         ...data,
       }),
     }),
 
-  // Stats
-  getStats: () => fetchApi<any>('/stats'),
-
-  // Candidates (if your API has these endpoints)
-  getCandidates: (roomId: string) => 
-    fetchApi<any[]>(`/rooms/${roomId}/candidates`),
+  // Realtime Stats
+  getRealtimeStats: (roomId: string) =>
+    fetchApi<any>(`/admin/rooms/${roomId}/realtime`),
 };
 
 export { ApiError };

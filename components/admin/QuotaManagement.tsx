@@ -1,24 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import { Progress } from "../ui/progress";
-import { getStats } from '@/lib/actions';
-import { Stats } from '@/types';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { api } from '@/lib/api-client';
+
+interface QuotaData {
+  admin: {
+    id: string;
+    username: string;
+    max_room: number;
+    max_voters: number;
+    is_active: boolean;
+  };
+  current_rooms: number;
+  current_voters: number;
+  room_limit: number;
+  voters_limit: number;
+}
 
 export function QuotaManagement() {
-  const [stats, setStats] = useState<Stats | null>(null);
+  const { token, loading: authLoading } = useAuth();
+  const [quota, setQuota] = useState<QuotaData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadStats = async () => {
-      const data = await getStats();
-      setStats(data);
+    if (authLoading) {
+      return;
+    }
+
+    const loadQuota = async () => {
+      try {
+        if (!token) {
+          throw new Error('Not authenticated');
+        }
+        
+        api.setToken(token);
+        const data = await api.getQuota();
+        setQuota(data);
+      } catch (err) {
+        console.error('Error loading quota:', err);
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
     };
-    loadStats();
-  }, []);
+    loadQuota();
+  }, [token, authLoading]);
 
-  if (!stats) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-600">Error: {error}</div>;
+  if (!quota) return <div>Failed to load quota</div>;
 
-  const roomPercentage = (stats.roomsCreated / stats.totalRoomQuota) * 100;
-  const voterPercentage = (stats.votersUsed / stats.totalVoterQuota) * 100;
+  const roomPercentage = (quota.current_rooms / quota.room_limit) * 100;
+  const voterPercentage = (quota.current_voters / quota.voters_limit) * 100;
 
   return (
     <div className="space-y-8 max-w-3xl">
@@ -35,12 +70,12 @@ export function QuotaManagement() {
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="flex justify-between items-end">
-               <div className="text-4xl font-bold">{stats.roomsCreated} <span className="text-muted-foreground text-lg font-normal">/ {stats.totalRoomQuota}</span></div>
+               <div className="text-4xl font-bold">{quota.current_rooms} <span className="text-muted-foreground text-lg font-normal">/ {quota.room_limit}</span></div>
                <div className="text-sm font-medium text-muted-foreground">{Math.round(roomPercentage)}% Used</div>
              </div>
              <Progress value={roomPercentage} className="h-4" />
              <div className="text-sm text-muted-foreground pt-2">
-               You have {stats.totalRoomQuota - stats.roomsCreated} rooms remaining in your plan.
+               You have {quota.room_limit - quota.current_rooms} rooms remaining in your plan.
              </div>
           </CardContent>
         </Card>
@@ -52,12 +87,12 @@ export function QuotaManagement() {
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="flex justify-between items-end">
-               <div className="text-4xl font-bold">{stats.votersUsed} <span className="text-muted-foreground text-lg font-normal">/ {stats.totalVoterQuota}</span></div>
+               <div className="text-4xl font-bold">{quota.current_voters} <span className="text-muted-foreground text-lg font-normal">/ {quota.voters_limit}</span></div>
                <div className="text-sm font-medium text-muted-foreground">{Math.round(voterPercentage)}% Used</div>
              </div>
              <Progress value={voterPercentage} className="h-4" />
              <div className="text-sm text-muted-foreground pt-2">
-               You have {stats.totalVoterQuota - stats.votersUsed} votes remaining in your plan.
+               You have {quota.voters_limit - quota.current_voters} votes remaining in your plan.
              </div>
           </CardContent>
         </Card>

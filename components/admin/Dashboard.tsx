@@ -4,33 +4,82 @@ import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Badge } from "../ui/badge";
 import { Plus, Users, Layout, Clock, BarChart3, ArrowRight } from 'lucide-react';
-import { getStats, getRooms } from '@/lib/actions';
-import { Stats, Room } from '@/types';
-import { LiveVotingGraph } from '../common/LiveVotingGraph';
+import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { api } from '@/lib/api-client';
 
 interface DashboardProps {}
 
+interface QuotaData {
+  admin: {
+    id: string;
+    username: string;
+    max_room: number;
+    max_voters: number;
+    is_active: boolean;
+  };
+  current_rooms: number;
+  current_voters: number;
+  room_limit: number;
+  voters_limit: number;
+}
+
+interface Room {
+  id: string;
+  name: string;
+  voters_type: string;
+  status: string;
+  publish_state: string;
+  created_at: string;
+}
+
 export function AdminDashboard({}: DashboardProps) {
   const router = useRouter();
-  const [stats, setStats] = useState<Stats | null>(null);
+  const { token, loading: authLoading } = useAuth();
+  const [quota, setQuota] = useState<QuotaData | null>(null);
   const [recentRooms, setRecentRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (authLoading) {
+      // Wait for auth to finish loading
+      return;
+    }
+
     const loadData = async () => {
-      const statsData = await getStats();
-      const roomsData = await getRooms();
-      setStats(statsData);
-      setRecentRooms(roomsData.slice(0, 5));
+      try {
+        if (!token) {
+          throw new Error('Not authenticated');
+        }
+        
+        console.log('Loading quota data...');
+        api.setToken(token);
+        const quotaData = await api.getQuota();
+        console.log('Quota data received:', quotaData);
+        
+        const roomsResponse = await api.getRooms();
+        const roomsData = roomsResponse.rooms || [];
+        console.log('Rooms data received:', roomsData);
+        
+        setQuota(quotaData);
+        setRecentRooms(roomsData.slice(0, 5));
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        setError(errorMsg);
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
-  }, []);
+  }, [token, authLoading]);
 
-  if (!stats) return <div className="p-8">Loading...</div>;
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
+  if (!quota) return <div className="p-8 text-red-600">Failed to load quota data</div>;
 
-  // Aggregate candidates for the main graph (showing top candidates across all active rooms? 
-  // Or just pick the most active room? Let's pick the first active room for the visualization)
-  const activeRoom = recentRooms.find(r => r.status === 'published');
+  const activeRooms = recentRooms.filter(r => r.publish_state === 'published').length;
   
   return (
     <div className="space-y-8">
@@ -43,25 +92,25 @@ export function AdminDashboard({}: DashboardProps) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Room Quota</CardTitle>
+            <CardTitle className="text-sm font-medium">Room Quota</CardTitle>
             <Layout className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.roomsCreated} / {stats.totalRoomQuota}</div>
+            <div className="text-2xl font-bold">{quota.current_rooms} / {quota.room_limit}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.totalRoomQuota - stats.roomsCreated} rooms remaining
+              {quota.room_limit - quota.current_rooms} rooms remaining
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Voter Quota</CardTitle>
+            <CardTitle className="text-sm font-medium">Voter Quota</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.votersUsed} / {stats.totalVoterQuota}</div>
+            <div className="text-2xl font-bold">{quota.current_voters} / {quota.voters_limit}</div>
             <p className="text-xs text-muted-foreground">
-              {Math.round((stats.votersUsed / stats.totalVoterQuota) * 100)}% quota used
+              {Math.round((quota.current_voters / quota.voters_limit) * 100)}% quota used
             </p>
           </CardContent>
         </Card>
@@ -71,7 +120,7 @@ export function AdminDashboard({}: DashboardProps) {
             <ActivityIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.activeRooms}</div>
+            <div className="text-2xl font-bold">{activeRooms}</div>
             <p className="text-xs text-muted-foreground">
               Currently accepting votes
             </p>
@@ -90,86 +139,74 @@ export function AdminDashboard({}: DashboardProps) {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        {/* Graph Section */}
-        <div className="col-span-4">
-          {activeRoom ? (
-            <LiveVotingGraph 
-              candidates={activeRoom.candidates} 
-              title={`Live: ${activeRoom.name}`} 
-            />
-          ) : (
-            <Card className="h-[300px] flex items-center justify-center text-muted-foreground">
-              No active voting rooms to display
-            </Card>
-          )}
-        </div>
-
-        {/* Recent Rooms List */}
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Recent Rooms</CardTitle>
-            <CardDescription>
-              Recently created voting rooms.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentRooms.map(room => (
-                <div key={room.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">{room.name}</p>
-                    <p className="text-xs text-muted-foreground capitalize">{room.type.replace('_', ' ')}</p>
-                  </div>
-                  <Badge variant={room.status === 'published' ? 'default' : 'secondary'}>
-                    {room.status}
-                  </Badge>
-                </div>
-              ))}
-              <Button variant="ghost" className="w-full text-xs" onClick={() => router.push('/admin/rooms')}>
-                View all rooms <ArrowRight className="ml-2 h-3 w-3" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Full Table Preview */}
+      {/* Recent Rooms List */}
       <Card>
         <CardHeader>
-          <CardTitle>All Rooms</CardTitle>
+          <CardTitle>Recent Rooms</CardTitle>
+          <CardDescription>
+            Recently created voting rooms.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Room Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead className="text-right">Votes</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentRooms.map((room) => (
-                <TableRow key={room.id}>
-                  <TableCell className="font-medium">{room.name}</TableCell>
-                  <TableCell className="capitalize">{room.type.replace('_', ' ')}</TableCell>
-                  <TableCell>
-                    <Badge variant={room.status === 'published' ? 'default' : (room.status === 'closed' ? 'destructive' : 'secondary')}>
-                      {room.status}
+          <div className="space-y-4">
+            {recentRooms.length > 0 ? (
+              <>
+                {recentRooms.map(room => (
+                  <div key={room.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">{room.name}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{room.voters_type.replace('_', ' ')}</p>
+                    </div>
+                    <Badge variant={room.publish_state === 'published' ? 'default' : 'secondary'}>
+                      {room.publish_state}
                     </Badge>
-                  </TableCell>
-                  <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
-                  <TableCell className="text-right">
-                    {room.candidates.reduce((acc, c) => acc + c.voteCount, 0)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                ))}
+                <Button variant="ghost" className="w-full text-xs" onClick={() => router.push('/admin/rooms')}>
+                  View all rooms <ArrowRight className="ml-2 h-3 w-3" />
+                </Button>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-4">No rooms created yet</p>
+            )}
+          </div>
         </CardContent>
       </Card>
+      
+      {/* Full Table Preview */}
+      {recentRooms.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>All Rooms</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Room Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Publish State</TableHead>
+                  <TableHead>Created At</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentRooms.map((room) => (
+                  <TableRow key={room.id}>
+                    <TableCell className="font-medium">{room.name}</TableCell>
+                    <TableCell className="capitalize">{room.voters_type.replace('_', ' ')}</TableCell>
+                    <TableCell>
+                      <Badge variant={room.publish_state === 'published' ? 'default' : (room.status === 'disabled' ? 'destructive' : 'secondary')}>
+                        {room.publish_state}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{new Date(room.created_at).toLocaleDateString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
