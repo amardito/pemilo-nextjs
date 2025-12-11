@@ -1,6 +1,6 @@
 // API Client for Go REST Backend
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-pemilo.amardito.info/api';
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
