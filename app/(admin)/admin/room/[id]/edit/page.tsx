@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Save } from 'lucide-react';
 import { toast } from 'sonner';
@@ -120,7 +119,7 @@ export default function EditRoomPage() {
             <div className="space-y-2">
               <Label>Type</Label>
               <div className="flex items-center">
-                <Badge variant="secondary">{room.voters_type.replace(/_/g, ' ')}</Badge>
+                <Badge variant="secondary">{room.voters_type.replaceAll('_', ' ')}</Badge>
                 <span className="text-sm text-muted-foreground ml-2">(cannot be changed)</span>
               </div>
             </div>

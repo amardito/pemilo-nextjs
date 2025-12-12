@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog";
 import { Badge } from "../ui/badge";
-import { Trash2, Plus, Image as ImageIcon, ArrowLeft, ArrowRight, Save, Check, Users } from 'lucide-react';
+import { Trash2, Plus, Image as ImageIcon, ArrowLeft, ArrowRight, Save, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -66,11 +66,13 @@ const ROOM_NAME_PLACEHOLDERS = [
   'Organization Census Poll'
 ];
 
-function getRandomPlaceholder(): string {
-  return ROOM_NAME_PLACEHOLDERS[Math.floor(Math.random() * ROOM_NAME_PLACEHOLDERS.length)];
+function getStepTitle(step: number): string {
+  if (step === 1) return 'Room Configuration';
+  if (step === 2) return 'Add Candidates & Running Mates';
+  return 'Review & Create';
 }
 
-export function CreateRoom({}: CreateRoomProps) {
+export function CreateRoom(_props: Readonly<CreateRoomProps>) {
   const router = useRouter();
   const { token } = useAuth();
   const [step, setStep] = useState(1);
@@ -78,7 +80,6 @@ export function CreateRoom({}: CreateRoomProps) {
   const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [showTicketDialog, setShowTicketDialog] = useState(false);
   const [quota, setQuota] = useState<any>(null);
-  const [quotaLoading, setQuotaLoading] = useState(true);
   
   // Generate random placeholder on component mount
   const randomPlaceholder = useMemo(() => getRandomPlaceholder(), []);
@@ -107,9 +108,8 @@ export function CreateRoom({}: CreateRoomProps) {
         const quotaData = await api.getQuota();
         setQuota(quotaData);
       } catch (error) {
-      } finally {
-        setQuotaLoading(false);
-      }
+        console.error('Failed to fetch quota:', error);
+      } 
     };
 
     fetchQuota();
@@ -243,11 +243,9 @@ export function CreateRoom({}: CreateRoomProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Step {step}: {
-            step === 1 ? "Room Configuration" : 
-            step === 2 ? "Add Candidates & Running Mates" : 
-            "Review & Create"
-          }</CardTitle>
+          <CardTitle>
+            Step {step}: {getStepTitle(step)}
+          </CardTitle>
           <CardDescription>
             {step === 1 && "Configure the voting room type and basic settings."}
             {step === 2 && "Add candidates with optional running mates (sub-candidates)."}
@@ -377,7 +375,11 @@ export function CreateRoom({}: CreateRoomProps) {
   );
 }
 
-function Step1RoomConfig({ roomData, setRoomData, randomPlaceholder }: { roomData: RoomFormData, setRoomData: Function, randomPlaceholder: string }) {
+function getRandomPlaceholder(): string {
+  return ROOM_NAME_PLACEHOLDERS[Math.floor(Math.random() * ROOM_NAME_PLACEHOLDERS.length)];
+}
+
+function Step1RoomConfig({ roomData, setRoomData, randomPlaceholder }: Readonly<{ roomData: RoomFormData; setRoomData: Function; randomPlaceholder: string }>) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -417,7 +419,7 @@ function Step1RoomConfig({ roomData, setRoomData, randomPlaceholder }: { roomDat
               id="voters_limit"
               type="number" 
               value={roomData.voters_limit || ''} 
-              onChange={e => setRoomData({ ...roomData, voters_limit: parseInt(e.target.value) || undefined })} 
+              onChange={e => setRoomData({ ...roomData, voters_limit: Number.parseInt(e.target.value) || undefined })} 
               placeholder="e.g. 500"
             />
           </div>
@@ -536,8 +538,8 @@ function Step2Candidates({
           </div>
         ) : (
           <div className="space-y-4">
-            {candidates.map((candidate: CandidateFormData, index) => (
-              <Card key={index} className="relative shadow-md hover:shadow-lg transition-shadow border-l-4 border-l-primary">
+            {candidates.map((candidate: CandidateFormData, index: number) => (
+              <Card key={`candidate-${candidate.name}-${index}`} className="relative shadow-md hover:shadow-lg transition-shadow border-l-4 border-l-primary">
                 {/* Candidate Number Badge */}
                 <div className="absolute -top-3 -left-3 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm shadow-md z-10">
                   {index + 1}
@@ -609,10 +611,10 @@ function Step2Candidates({
                   ) : (
                     <div className="space-y-3">
                       {candidate.sub_candidates.map((sub, subIndex) => (
-                        <div key={subIndex} className="border rounded-lg p-3 relative bg-gradient-to-br from-muted/30 to-muted/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div key={`sub-${sub.name}-${subIndex}`} className="border rounded-lg p-3 relative bg-gradient-to-br from-muted/30 to-muted/50 shadow-sm hover:shadow-md transition-shadow">
                           {/* Sub-candidate Number Badge */}
                           <div className="absolute -top-2 -left-2 h-6 w-6 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-semibold text-xs shadow-sm z-10 border border-primary/20">
-                            {String.fromCharCode(65 + subIndex)}
+                            {String.fromCodePoint(65 + subIndex)}
                           </div>
 
                           <Button 
@@ -706,8 +708,8 @@ function Step3Review({ roomData, candidates }: any) {
           <CardTitle className="text-lg">Candidates Summary</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {candidates.map((candidate, index) => (
-            <div key={index} className="p-3 border rounded-lg">
+          {candidates.map((candidate: CandidateFormData, index: number) => (
+            <div key={`review-candidate-${candidate.name}-${index}`} className="p-3 border rounded-lg">
               <div className="flex items-start gap-3">
                 <div className="h-12 w-12 bg-muted rounded flex items-center justify-center overflow-hidden">
                   {candidate.photo_url ? (
@@ -722,7 +724,7 @@ function Step3Review({ roomData, candidates }: any) {
                   {candidate.sub_candidates.length > 0 && (
                     <div className="mt-2 ml-2 space-y-1">
                       <p className="text-xs font-medium text-muted-foreground">Running Mates:</p>
-                      {candidate.sub_candidates.map((sub, subIndex) => (
+                      {candidate.sub_candidates.map((sub: SubCandidateFormData, subIndex: number) => (
                         <p key={subIndex} className="text-xs text-muted-foreground">• {sub.name}</p>
                       ))}
                     </div>
