@@ -1,48 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
 import { Progress } from "../ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { ArrowLeft, Play, Square, Download, Copy, Share2, Users, Ticket, Pencil, Plus } from 'lucide-react';
+import { ArrowLeft, Play, Square, Download, Copy, Pencil, Plus } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { LiveVotingGraph } from '../common/LiveVotingGraph';
 import { toast } from 'sonner';
 import { api } from '@/lib/api-client';
+import { Candidate } from '@/types';
 
 interface RoomDetailProps {
   roomId: string | null;
 }
 
-interface Candidate {
-  id: string;
-  name: string;
-  photo_url?: string;
-  description?: string;
-  vote_count?: number;
-  sub_candidates?: Array<{
-    id: string;
-    name: string;
-    photo_url?: string;
-    description?: string;
-  }>;
-}
-
 interface Room {
   id: string;
   name: string;
-  voters_type: string;
-  publish_state: 'draft' | 'published' | 'closed';
-  created_at: string;
+  description?: string;
+  publish_state?: 'draft' | 'published' | 'closed';
+  candidates?: Candidate[];
+  voters_type?: string;
   session_state?: string;
   voters_limit?: number;
   current_voters?: number;
+  created_at?: string;
 }
 
-export function RoomDetail({ roomId }: RoomDetailProps) {
+export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
   const router = useRouter();
   const { token, loading: authLoading } = useAuth();
   const [room, setRoom] = useState<Room | undefined>(undefined);
@@ -60,6 +47,7 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
         setRoom(roomResponse);
         setCandidates(candidatesResponse.candidates || []);
       } catch (error) {
+        console.error('Failed to load room details:', error);
         toast.error('Failed to load room details');
       } finally {
         setLoading(false);
@@ -82,6 +70,7 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
       setRoom({ ...room, publish_state: newState });
       toast.success(`Room ${newState}`);
     } catch (error) {
+      console.error('Failed to update room:', error);
       toast.error('Failed to update room');
     }
   };
@@ -94,11 +83,18 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
       setRoom({ ...room, session_state: newState });
       toast.success(`Session ${newState}`);
     } catch (error) {
+      console.error('Failed to update session state:', error);
       toast.error('Failed to update session state');
     }
   };
 
-  const totalVotes = candidates.reduce((acc, c) => acc + (c.vote_count || 0), 0);
+  const totalVotes = candidates.reduce((acc, c) => acc + (c.voteCount || 0), 0);
+
+  const getPublishStateVariant = () => {
+    if (room.publish_state === 'published') return 'default';
+    if (room.publish_state === 'closed') return 'destructive';
+    return 'secondary';
+  };
 
   return (
     <div className="space-y-6">
@@ -111,11 +107,11 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
           <div>
             <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
               {room.name}
-              <Badge variant={room.publish_state === 'published' ? 'default' : (room.publish_state === 'closed' ? 'destructive' : 'secondary')}>
+              <Badge variant={getPublishStateVariant()}>
                 {room.publish_state}
               </Badge>
             </h2>
-            <p className="text-muted-foreground">{room.id} • {room.voters_type.replace(/_/g, ' ')}</p>
+            <p className="text-muted-foreground">{room.id} • {room.voters_type?.replaceAll('_', ' ')}</p>
           </div>
         </div>
         <TooltipProvider>
@@ -192,19 +188,19 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
                 {candidates.map((candidate, idx) => (
                    <div key={candidate.id} className="flex items-center gap-4 p-3 border rounded-lg">
                       <div className="h-12 w-12 rounded-full bg-muted overflow-hidden flex-shrink-0">
-                        {candidate.photo_url && <img src={candidate.photo_url} className="h-full w-full object-cover" />}
+                        {candidate.photoUrl && <img src={candidate.photoUrl} alt={candidate.name} className="h-full w-full object-cover" />}
                       </div>
                       <div className="flex-1">
                         <div className="font-medium">{candidate.name}</div>
                         <div className="text-xs text-muted-foreground truncate max-w-[200px]">{candidate.description}</div>
-                        {candidate.sub_candidates && candidate.sub_candidates.length > 0 && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            {candidate.sub_candidates.map(sc => sc.name).join(', ')}
+                        {candidate.subCandidates && candidate.subCandidates.length > 0 && (
+                          <div className="text-xs text-muted-foreground">
+                            {candidate.subCandidates.map(sc => sc.name).join(', ')}
                           </div>
                         )}
                       </div>
                       <div className="text-right">
-                         <div className="font-bold text-lg">{candidate.vote_count || 0}</div>
+                         <div className="font-bold text-lg">{candidate.voteCount || 0}</div>
                          <div className="text-xs text-muted-foreground">Votes</div>
                       </div>
                    </div>
@@ -246,11 +242,11 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
              <CardContent className="space-y-2 text-sm">
                <div className="flex justify-between">
                  <span className="text-muted-foreground">Type:</span>
-                 <span className="font-medium">{room.voters_type.replace(/_/g, ' ')}</span>
+                 <span className="font-medium">{room.voters_type?.replaceAll('_', ' ')}</span>
                </div>
                <div className="flex justify-between">
                  <span className="text-muted-foreground">Created:</span>
-                 <span className="font-medium">{new Date(room.created_at).toLocaleDateString()}</span>
+                 <span className="font-medium">{room.created_at ? new Date(room.created_at).toLocaleDateString() : 'N/A'}</span>
                </div>
                {room.session_state && (
                  <div className="flex justify-between">
