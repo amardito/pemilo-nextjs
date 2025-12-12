@@ -44,7 +44,7 @@ interface Room {
 
 export function RoomDetail({ roomId }: RoomDetailProps) {
   const router = useRouter();
-  const { token, authLoading } = useAuth();
+  const { token, loading: authLoading } = useAuth();
   const [room, setRoom] = useState<Room | undefined>(undefined);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
