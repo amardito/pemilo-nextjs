@@ -97,7 +97,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64">
+            <SheetContent side="left" className="w-64 flex flex-col">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <Vote className="h-6 w-6 text-primary" />
@@ -105,7 +105,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </SheetTitle>
               </SheetHeader>
               
-              <nav className="flex flex-col gap-2 mt-6">
+              <nav className="flex flex-col gap-2 mt-6 flex-1">
                 {navItems.map((item) => (
                   <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>
                     <Button
@@ -122,7 +122,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 ))}
               </nav>
 
-              <div className="absolute bottom-4 left-4 right-4 space-y-2">
+              <div className="mt-auto pt-4 space-y-2 border-t">
                 <LogoutButton />
                 <Link href="/voter" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground">

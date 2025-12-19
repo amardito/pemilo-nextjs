@@ -160,8 +160,8 @@ export function RoomList({}: RoomListProps) {
            </div>
         </CardHeader>
         <CardContent>
-          {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto">
+          {/* Desktop Table View - Same functionality available in mobile card view below */}
+          <div className="hidden md:block overflow-x-auto" aria-label="Rooms table view">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -264,8 +264,8 @@ export function RoomList({}: RoomListProps) {
             </Table>
           </div>
 
-          {/* Mobile Card View */}
-          <div className="md:hidden space-y-4">
+          {/* Mobile Card View - Accessible alternative to desktop table */}
+          <div className="md:hidden space-y-4" aria-label="Rooms card view">
             {filteredRooms.length === 0 && (
               <div className="h-24 flex items-center justify-center text-muted-foreground">
                 No rooms found.

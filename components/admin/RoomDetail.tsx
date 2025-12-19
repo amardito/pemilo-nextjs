@@ -132,7 +132,7 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button onClick={() => handlePublishStateChange('draft')} className="bg-amber-600 hover:bg-amber-700 text-xs md:text-sm">
-                    <Square className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4 fill-current" /> <span className="hidden sm:inline">Set as </span>Draft
+                    <Square className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4 fill-current" /> Unpublish
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>

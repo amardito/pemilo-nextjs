@@ -123,6 +123,7 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   // --- VIEW 3: BALLOT ---
   return (
     <div className="space-y-6 md:space-y-8 pb-20 md:pb-12">
+      {/* Extra bottom padding on mobile to account for fixed submit button */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl md:text-3xl font-bold px-4">{room.name}</h1>
         <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4">{room.description}</p>
