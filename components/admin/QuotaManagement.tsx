@@ -55,13 +55,13 @@ export function QuotaManagement() {
   const voterPercentage = (quota.current_voters / quota.voters_limit) * 100;
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="space-y-6 md:space-y-8 max-w-3xl">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Quota Management</h2>
-        <p className="text-muted-foreground">Monitor your resource consumption.</p>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Quota Management</h2>
+        <p className="text-sm md:text-base text-muted-foreground">Monitor your resource consumption.</p>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4 md:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Room Quota</CardTitle>
@@ -69,8 +69,8 @@ export function QuotaManagement() {
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="flex justify-between items-end">
-               <div className="text-4xl font-bold">{quota.current_rooms} <span className="text-muted-foreground text-lg font-normal">/ {quota.room_limit}</span></div>
-               <div className="text-sm font-medium text-muted-foreground">{Math.round(roomPercentage)}% Used</div>
+               <div className="text-3xl md:text-4xl font-bold">{quota.current_rooms} <span className="text-muted-foreground text-base md:text-lg font-normal">/ {quota.room_limit}</span></div>
+               <div className="text-xs md:text-sm font-medium text-muted-foreground">{Math.round(roomPercentage)}% Used</div>
              </div>
              <Progress value={roomPercentage} className="h-4" />
              <div className="text-sm text-muted-foreground pt-2">
@@ -86,8 +86,8 @@ export function QuotaManagement() {
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="flex justify-between items-end">
-               <div className="text-4xl font-bold">{quota.current_voters} <span className="text-muted-foreground text-lg font-normal">/ {quota.voters_limit}</span></div>
-               <div className="text-sm font-medium text-muted-foreground">{Math.round(voterPercentage)}% Used</div>
+               <div className="text-3xl md:text-4xl font-bold">{quota.current_voters} <span className="text-muted-foreground text-base md:text-lg font-normal">/ {quota.voters_limit}</span></div>
+               <div className="text-xs md:text-sm font-medium text-muted-foreground">{Math.round(voterPercentage)}% Used</div>
              </div>
              <Progress value={voterPercentage} className="h-4" />
              <div className="text-sm text-muted-foreground pt-2">
