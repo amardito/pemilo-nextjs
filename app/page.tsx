@@ -34,27 +34,27 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center space-y-6">
-          <Badge className="mx-auto bg-blue-500/20 text-blue-300 border-blue-400">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+        <div className="text-center space-y-4 md:space-y-6">
+          <Badge className="mx-auto bg-blue-500/20 text-blue-300 border-blue-400 text-xs md:text-sm">
             Secure Democratic Voting Platform
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             Fair, Transparent Voting
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto px-4">
             Pemilo is a modern, secure voting platform designed for organizations, communities, and institutions. 
             Simple to use, impossible to manipulate.
           </p>
-          <div className="flex gap-4 justify-center pt-6">
-            <Link href="/admin-login">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4 md:pt-6 px-4">
+            <Link href="/admin-login" className="w-full sm:w-auto">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full">
                 Launch Admin Panel
               </Button>
             </Link>
-            <Link href="/voter">
+            <Link href="/voter" className="w-full sm:w-auto">
               <Button 
-                className="bg-slate-700 hover:bg-slate-600 text-white px-8 py-6 text-lg border border-slate-600"
+                className="bg-slate-700 hover:bg-slate-600 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg border border-slate-600 w-full"
               >
                 Vote as Guest
               </Button>
@@ -64,8 +64,8 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-700">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Key Features</h2>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 border-t border-slate-700">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12 lg:mb-16">Key Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Feature 1 */}
           <Card className="bg-slate-800/50 border-slate-700 hover:border-blue-500 transition-colors">
@@ -148,9 +148,9 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-700">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 border-t border-slate-700">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12 lg:mb-16">How It Works</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           <div className="text-center">
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
               1
@@ -183,13 +183,13 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-700 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Voting?</h2>
-        <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 border-t border-slate-700 text-center">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6">Ready to Start Voting?</h2>
+        <p className="text-base md:text-lg lg:text-xl text-slate-400 mb-6 md:mb-8 max-w-2xl mx-auto">
           Join thousands of organizations using Pemilo for fair and transparent voting.
         </p>
         <Link href="/admin-login">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg">
             Get Started as Admin
           </Button>
         </Link>

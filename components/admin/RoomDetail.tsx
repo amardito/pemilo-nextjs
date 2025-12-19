@@ -97,30 +97,30 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-start gap-3 md:gap-4">
           <Button variant="ghost" size="icon" onClick={() => router.back()}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-              {room.name}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight flex flex-wrap items-center gap-2">
+              <span className="break-words">{room.name}</span>
               <Badge variant={getPublishStateVariant()}>
                 {room.publish_state}
               </Badge>
             </h2>
-            <p className="text-muted-foreground">{room.id} • {room.voters_type?.replaceAll('_', ' ')}</p>
+            <p className="text-sm md:text-base text-muted-foreground truncate">{room.id} • {room.voters_type?.replaceAll('_', ' ')}</p>
           </div>
         </div>
         <TooltipProvider>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {room.publish_state !== 'published' && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={() => handlePublishStateChange('published')} className="bg-green-600 hover:bg-green-700">
-                    <Play className="mr-2 h-4 w-4" /> Publish
+                  <Button onClick={() => handlePublishStateChange('published')} className="bg-green-600 hover:bg-green-700 text-xs md:text-sm">
+                    <Play className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4" /> Publish
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -131,8 +131,8 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
             {room.publish_state === 'published' && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={() => handlePublishStateChange('draft')} className="bg-amber-600 hover:bg-amber-700">
-                    <Square className="mr-2 h-4 w-4 fill-current" /> Set as Draft
+                  <Button onClick={() => handlePublishStateChange('draft')} className="bg-amber-600 hover:bg-amber-700 text-xs md:text-sm">
+                    <Square className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4 fill-current" /> Unpublish
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -143,8 +143,8 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
             {room.session_state === 'open' && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={() => handleSessionStateChange('closed')} variant="destructive">
-                    <Square className="mr-2 h-4 w-4 fill-current" /> Close Session
+                  <Button onClick={() => handleSessionStateChange('closed')} variant="destructive" className="text-xs md:text-sm">
+                    <Square className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4 fill-current" /> Close
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -155,8 +155,8 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
             {room.session_state === 'closed' && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={() => handleSessionStateChange('open')} className="bg-blue-600 hover:bg-blue-700">
-                    <Play className="mr-2 h-4 w-4" /> Open Session
+                  <Button onClick={() => handleSessionStateChange('open')} className="bg-blue-600 hover:bg-blue-700 text-xs md:text-sm">
+                    <Play className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4" /> Open
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -164,19 +164,19 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
                 </TooltipContent>
               </Tooltip>
             )}
-            <Button variant="outline" onClick={() => router.push(`/admin/room/${room.id}/edit`)}>
-              <Pencil className="mr-2 h-4 w-4" /> Edit
+            <Button variant="outline" onClick={() => router.push(`/admin/room/${room.id}/edit`)} className="text-xs md:text-sm">
+              <Pencil className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4" /> Edit
             </Button>
-            <Button variant="outline" onClick={() => toast.success("Data exported to CSV!")}>
-              <Download className="mr-2 h-4 w-4" /> Export
+            <Button variant="outline" onClick={() => toast.success("Data exported to CSV!")} className="text-xs md:text-sm">
+              <Download className="mr-1 md:mr-2 h-3 md:h-4 w-3 md:w-4" /> Export
             </Button>
           </div>
         </TooltipProvider>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Main Content Area */}
-        <div className="md:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 md:space-y-6">
           <LiveVotingGraph candidates={candidates} height={400} />
           
           <Card>
@@ -211,7 +211,7 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
         </div>
 
         {/* Sidebar Info */}
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <Card>
              <CardHeader>
                <CardTitle>Quick Stats</CardTitle>

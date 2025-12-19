@@ -22,7 +22,7 @@ export function VoterLanding({ onJoinRoom }: VoterLandingProps) {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto space-y-8 py-12">
+    <div className="max-w-md mx-auto space-y-6 md:space-y-8 py-8 md:py-12 px-4">
       <div className="text-center space-y-2">
          <h1 className="text-4xl font-extrabold tracking-tight text-primary">VoteNow</h1>
          <p className="text-muted-foreground">Secure, fast, and simple voting.</p>
