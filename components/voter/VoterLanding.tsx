@@ -22,22 +22,23 @@ export function VoterLanding({ onJoinRoom }: VoterLandingProps) {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto space-y-8 py-12">
+    <div className="max-w-md mx-auto space-y-6 sm:space-y-8 py-6 sm:py-12 px-4 sm:px-0">
       <div className="text-center space-y-2">
-         <h1 className="text-4xl font-extrabold tracking-tight text-primary">VoteNow</h1>
-         <p className="text-muted-foreground">Secure, fast, and simple voting.</p>
+         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">VoteNow</h1>
+         <p className="text-sm sm:text-base text-muted-foreground">Secure, fast, and simple voting.</p>
       </div>
 
       <Card className="shadow-lg border-t-4 border-t-primary">
         <CardHeader>
-          <CardTitle>Join a Voting Room</CardTitle>
-          <CardDescription>Enter the Room ID shared with you.</CardDescription>
+          <CardTitle className="text-lg sm:text-xl">Join a Voting Room</CardTitle>
+          <CardDescription className="text-sm">Enter the Room ID shared with you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input 
              placeholder="Room ID / Code" 
              value={inputRoomId}
              onChange={e => setInputRoomId(e.target.value)}
+             className="text-base"
           />
           <Button className="w-full" onClick={() => onJoinRoom(inputRoomId)} disabled={!inputRoomId}>
             Enter Room <ArrowRight className="ml-2 h-4 w-4" />
@@ -54,21 +55,21 @@ export function VoterLanding({ onJoinRoom }: VoterLandingProps) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {rooms.map(room => (
-          <Card key={room.id} className="cursor-pointer hover:border-primary transition-colors" onClick={() => onJoinRoom(room.id)}>
+          <Card key={room.id} className="cursor-pointer hover:border-primary transition-colors active:scale-98" onClick={() => onJoinRoom(room.id)}>
             <CardHeader className="p-4">
-               <CardTitle className="text-lg">{room.name}</CardTitle>
-               <CardDescription>{room.description}</CardDescription>
+               <CardTitle className="text-base sm:text-lg">{room.name}</CardTitle>
+               <CardDescription className="text-sm">{room.description}</CardDescription>
             </CardHeader>
-            <CardFooter className="p-4 pt-0 text-xs text-muted-foreground flex justify-between">
+            <CardFooter className="p-4 pt-0 text-xs text-muted-foreground flex flex-col sm:flex-row gap-1 sm:gap-0 sm:justify-between items-start sm:items-center">
                <span>{room.candidates.length} Candidates</span>
                <span className="uppercase">{room.type.replace('_', ' ')}</span>
             </CardFooter>
           </Card>
         ))}
         {rooms.length === 0 && (
-          <div className="text-center text-muted-foreground text-sm">No public rooms available right now.</div>
+          <div className="text-center text-muted-foreground text-sm py-8">No public rooms available right now.</div>
         )}
       </div>
     </div>

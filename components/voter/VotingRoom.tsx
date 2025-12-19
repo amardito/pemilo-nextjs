@@ -66,24 +66,25 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   // --- VIEW 1: TICKET GATE ---
   if (!hasAccess) {
     return (
-      <div className="max-w-md mx-auto py-12">
+      <div className="max-w-md mx-auto py-6 sm:py-12 px-4 sm:px-0">
         <Card>
           <CardHeader>
              <div className="mx-auto bg-muted rounded-full p-3 w-fit mb-4">
                <Lock className="h-6 w-6 text-muted-foreground" />
              </div>
-             <CardTitle className="text-center">Ticket Required</CardTitle>
-             <CardDescription className="text-center">
+             <CardTitle className="text-center text-lg sm:text-xl">Ticket Required</CardTitle>
+             <CardDescription className="text-center text-sm">
                This voting room ({room.name}) requires a valid ticket code.
              </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="space-y-2">
-               <Label>Enter Ticket Code</Label>
+               <Label className="text-sm">Enter Ticket Code</Label>
                <Input 
                  value={ticketCode} 
                  onChange={e => setTicketCode(e.target.value)} 
                  placeholder="e.g. ABC-123"
+                 className="text-base"
                />
              </div>
              <Button className="w-full" onClick={handleTicketSubmit}>
@@ -101,13 +102,13 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   // --- VIEW 2: SUCCESS ---
   if (isSuccess) {
     return (
-      <div className="max-w-md mx-auto py-12 text-center space-y-6">
-        <div className="mx-auto bg-green-100 p-6 rounded-full w-fit animate-in zoom-in duration-300">
-          <CheckCircle2 className="h-12 w-12 text-green-600" />
+      <div className="max-w-md mx-auto py-6 sm:py-12 text-center space-y-4 sm:space-y-6 px-4 sm:px-0">
+        <div className="mx-auto bg-green-100 p-4 sm:p-6 rounded-full w-fit animate-in zoom-in duration-300">
+          <CheckCircle2 className="h-10 w-10 sm:h-12 sm:w-12 text-green-600" />
         </div>
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Thanks for voting!</h2>
-          <p className="text-muted-foreground mt-2">Your vote has been securely recorded.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Thanks for voting!</h2>
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">Your vote has been securely recorded.</p>
         </div>
         <Card className="bg-muted/50">
            <CardContent className="pt-6">
@@ -115,46 +116,46 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
              <p className="text-sm font-medium text-green-600 mt-1">Status: Confirmed</p>
            </CardContent>
         </Card>
-        <Button onClick={onExit} size="lg">Return to Home</Button>
+        <Button onClick={onExit} size="lg" className="w-full sm:w-auto">Return to Home</Button>
       </div>
     );
   }
 
   // --- VIEW 3: BALLOT ---
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-6 sm:space-y-8 pb-20 sm:pb-12 px-4 sm:px-0">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">{room.name}</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">{room.description}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">{room.name}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">{room.description}</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {room.candidates.map(candidate => (
           <Card 
             key={candidate.id} 
-            className={`cursor-pointer transition-all hover:shadow-md ${selectedCandidate === candidate.id ? 'ring-2 ring-primary border-primary' : ''}`}
+            className={`cursor-pointer transition-all hover:shadow-md active:scale-98 ${selectedCandidate === candidate.id ? 'ring-2 ring-primary border-primary' : ''}`}
             onClick={() => setSelectedCandidate(candidate.id)}
           >
             <div className="aspect-video w-full bg-muted relative overflow-hidden">
                {candidate.photoUrl ? (
                  <img src={candidate.photoUrl} alt={candidate.name} className="w-full h-full object-cover" />
                ) : (
-                 <div className="flex items-center justify-center h-full text-muted-foreground">No Photo</div>
+                 <div className="flex items-center justify-center h-full text-sm text-muted-foreground">No Photo</div>
                )}
                {selectedCandidate === candidate.id && (
                  <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
                     <div className="bg-primary text-primary-foreground rounded-full p-2">
-                      <CheckCircle2 className="h-6 w-6" />
+                      <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                  </div>
                )}
             </div>
-            <CardHeader>
-              <CardTitle>{candidate.name}</CardTitle>
-              <CardDescription>{candidate.description}</CardDescription>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">{candidate.name}</CardTitle>
+              <CardDescription className="text-sm">{candidate.description}</CardDescription>
             </CardHeader>
             {candidate.subCandidates && candidate.subCandidates.length > 0 && (
-              <CardContent className="border-t pt-4 bg-muted/20">
+              <CardContent className="border-t pt-4 bg-muted/20 p-4 sm:p-6">
                 <Label className="text-xs text-muted-foreground mb-2 block">Select Running Mate (Optional)</Label>
                 <RadioGroup value={selectedSubCandidate || ''} onValueChange={setSelectedSubCandidate}>
                   {candidate.subCandidates.map(sub => (
@@ -170,10 +171,10 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
         ))}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-lg md:static md:bg-transparent md:border-0 md:shadow-none md:p-0 flex justify-center">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-lg md:static md:bg-transparent md:border-0 md:shadow-none md:p-0 flex justify-center z-10">
          <Button 
            size="lg" 
-           className="w-full md:w-auto md:px-12" 
+           className="w-full max-w-md md:max-w-none md:w-auto md:px-12" 
            disabled={!selectedCandidate}
            onClick={() => setIsConfirmOpen(true)}
          >
