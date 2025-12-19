@@ -66,7 +66,7 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   // --- VIEW 1: TICKET GATE ---
   if (!hasAccess) {
     return (
-      <div className="max-w-md mx-auto py-12">
+      <div className="max-w-md mx-auto py-8 md:py-12 px-4">
         <Card>
           <CardHeader>
              <div className="mx-auto bg-muted rounded-full p-3 w-fit mb-4">
@@ -101,13 +101,13 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
   // --- VIEW 2: SUCCESS ---
   if (isSuccess) {
     return (
-      <div className="max-w-md mx-auto py-12 text-center space-y-6">
+      <div className="max-w-md mx-auto py-8 md:py-12 px-4 text-center space-y-6">
         <div className="mx-auto bg-green-100 p-6 rounded-full w-fit animate-in zoom-in duration-300">
           <CheckCircle2 className="h-12 w-12 text-green-600" />
         </div>
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Thanks for voting!</h2>
-          <p className="text-muted-foreground mt-2">Your vote has been securely recorded.</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Thanks for voting!</h2>
+          <p className="text-sm md:text-base text-muted-foreground mt-2">Your vote has been securely recorded.</p>
         </div>
         <Card className="bg-muted/50">
            <CardContent className="pt-6">
@@ -122,13 +122,13 @@ export function VotingRoom({ roomId, onExit }: VotingRoomProps) {
 
   // --- VIEW 3: BALLOT ---
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-6 md:space-y-8 pb-20 md:pb-12">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">{room.name}</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">{room.description}</p>
+        <h1 className="text-2xl md:text-3xl font-bold px-4">{room.name}</h1>
+        <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-4">{room.description}</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {room.candidates.map(candidate => (
           <Card 
             key={candidate.id} 
