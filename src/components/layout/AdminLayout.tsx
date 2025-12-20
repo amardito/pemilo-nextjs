@@ -24,7 +24,7 @@ export function AdminLayout({ children, currentView, onNavigate }: AdminLayoutPr
       <aside className="w-64 bg-card border-r flex flex-col hidden md:flex">
         <div className="p-6 border-b flex items-center gap-2">
           <Vote className="h-6 w-6 text-primary" />
-          <h1 className="font-bold text-xl tracking-tight">VoteAdmin</h1>
+          <h1 className="font-bold text-xl tracking-tight">Pemilo</h1>
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
@@ -54,7 +54,7 @@ export function AdminLayout({ children, currentView, onNavigate }: AdminLayoutPr
         <header className="h-16 border-b bg-card flex items-center px-6 md:hidden">
           <div className="flex items-center gap-2">
              <Vote className="h-6 w-6 text-primary" />
-             <span className="font-bold">VoteAdmin</span>
+             <span className="font-bold">Pemilo</span>
           </div>
           {/* Mobile menu could go here */}
         </header>

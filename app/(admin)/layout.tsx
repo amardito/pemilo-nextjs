@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <>
       <div className="p-6 border-b flex items-center gap-2">
         <Vote className="h-6 w-6 text-primary" />
-        <h1 className="font-bold text-xl tracking-tight">VoteAdmin</h1>
+        <h1 className="font-bold text-xl tracking-tight">Pemilo</h1>
       </div>
       
       <nav className="flex-1 p-4 space-y-2">
@@ -110,7 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Sheet>
           <div className="flex items-center gap-2">
             <Vote className="h-6 w-6 text-primary" />
-            <span className="font-bold">VoteAdmin</span>
+            <span className="font-bold">Pemilo</span>
           </div>
         </header>
         

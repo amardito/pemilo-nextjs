@@ -13,7 +13,7 @@ export default function VoterLayout({ children }: { children: React.ReactNode })
             <div className="bg-primary/10 p-2 rounded-full">
               <Vote className="h-5 w-5 text-primary" />
             </div>
-            <span className="font-bold text-lg tracking-tight">VoteNow</span>
+            <span className="font-bold text-lg tracking-tight">Pemilo</span>
           </Link>
           <div className="text-sm text-muted-foreground">
             Online Voting Portal
@@ -27,7 +27,7 @@ export default function VoterLayout({ children }: { children: React.ReactNode })
 
       <footer className="bg-white border-t py-6 mt-auto">
         <div className="container mx-auto max-w-5xl px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} VoteNow System. All rights reserved.
+          © {new Date().getFullYear()} Pemilo. All rights reserved.
         </div>
       </footer>
     </div>
