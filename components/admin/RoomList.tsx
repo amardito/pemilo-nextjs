@@ -160,199 +160,106 @@ export function RoomList({}: RoomListProps) {
            </div>
         </CardHeader>
         <CardContent>
-          {/* Desktop Table View - Same functionality available in mobile card view below */}
-          <div className="hidden md:block overflow-x-auto" aria-label="Rooms table view">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[40px]">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[40px]">
+                  <Checkbox 
+                    checked={selectedRoomIds.size === filteredRooms.length && filteredRooms.length > 0}
+                    onCheckedChange={toggleSelectAll}
+                  />
+                </TableHead>
+                <TableHead>Room Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Publish State</TableHead>
+                <TableHead>Created At</TableHead>
+                <TableHead className="text-right">Session</TableHead>
+                <TableHead>Quick Actions</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredRooms.map((room) => (
+                <TableRow key={room.id}>
+                  <TableCell>
                     <Checkbox 
-                      checked={selectedRoomIds.size === filteredRooms.length && filteredRooms.length > 0}
-                      onCheckedChange={toggleSelectAll}
+                      checked={selectedRoomIds.has(room.id)}
+                      onCheckedChange={() => toggleRoomSelection(room.id)}
                     />
-                  </TableHead>
-                  <TableHead>Room Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Publish State</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead className="text-right">Session</TableHead>
-                  <TableHead>Quick Actions</TableHead>
-                  <TableHead className="w-[50px]"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredRooms.map((room) => (
-                  <TableRow key={room.id}>
-                    <TableCell>
-                      <Checkbox 
-                        checked={selectedRoomIds.has(room.id)}
-                        onCheckedChange={() => toggleRoomSelection(room.id)}
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => router.push(`/admin/room/${room.id}`)}>
-                      {room.name}
-                    </TableCell>
-                    <TableCell className="capitalize">{room.voters_type.replace('_', ' ')}</TableCell>
-                    <TableCell>
-                      <Badge variant={room.publish_state === 'published' ? 'default' : 'secondary'}>
-                        {room.publish_state}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{new Date(room.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant={room.session_state === 'open' ? 'default' : 'destructive'}>
-                        {room.session_state}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
+                  </TableCell>
+                  <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => router.push(`/admin/room/${room.id}`)}>
+                    {room.name}
+                  </TableCell>
+                  <TableCell className="capitalize">{room.voters_type.replace('_', ' ')}</TableCell>
+                  <TableCell>
+                    <Badge variant={room.publish_state === 'published' ? 'default' : 'secondary'}>
+                      {room.publish_state}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{new Date(room.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-right">
+                    <Badge variant={room.session_state === 'open' ? 'default' : 'destructive'}>
+                      {room.session_state}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => router.push(`/admin/room/${room.id}`)}
+                        className="text-xs"
+                      >
+                        View
+                      </Button>
+                      {room.publish_state !== 'published' && (
+                        <Button 
+                          size="sm" 
+                          onClick={() => handlePublishStateChange(room.id, 'published')}
+                          className="text-xs bg-green-600 hover:bg-green-700"
+                        >
+                          Publish
+                        </Button>
+                      )}
+                      {room.publish_state !== 'draft' && (
                         <Button 
                           size="sm" 
                           variant="outline"
-                          onClick={() => router.push(`/admin/room/${room.id}`)}
-                          className="text-xs"
+                          onClick={() => handlePublishStateChange(room.id, 'draft')}
+                          className="text-xs border-amber-600 text-amber-600 hover:bg-amber-50"
                         >
-                          View
+                          Draft
                         </Button>
-                        {room.publish_state !== 'published' && (
-                          <Button 
-                            size="sm" 
-                            onClick={() => handlePublishStateChange(room.id, 'published')}
-                            className="text-xs bg-green-600 hover:bg-green-700"
-                          >
-                            Publish
-                          </Button>
-                        )}
-                        {room.publish_state !== 'draft' && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => handlePublishStateChange(room.id, 'draft')}
-                            className="text-xs border-amber-600 text-amber-600 hover:bg-amber-50"
-                          >
-                            Draft
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>More Options</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => router.push(`/admin/room/${room.id}/edit`)}>Edit</DropdownMenuItem>
-                          <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">Danger Zone</DropdownMenuLabel>
-                          <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(room.id)}>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {filteredRooms.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      No rooms found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Mobile Card View - Accessible alternative to desktop table */}
-          <div className="md:hidden space-y-4" aria-label="Rooms card view">
-            {filteredRooms.length === 0 && (
-              <div className="h-24 flex items-center justify-center text-muted-foreground">
-                No rooms found.
-              </div>
-            )}
-            {filteredRooms.map((room) => (
-              <Card key={room.id} className="border-2">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-start gap-3 flex-1">
-                      <Checkbox 
-                        checked={selectedRoomIds.has(room.id)}
-                        onCheckedChange={() => toggleRoomSelection(room.id)}
-                        className="mt-1"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <CardTitle 
-                          className="text-base cursor-pointer hover:underline break-words"
-                          onClick={() => router.push(`/admin/room/${room.id}`)}
-                        >
-                          {room.name}
-                        </CardTitle>
-                        <CardDescription className="text-xs mt-1 capitalize">
-                          {room.voters_type.replace('_', ' ')}
-                        </CardDescription>
-                      </div>
+                      )}
                     </div>
+                  </TableCell>
+                  <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Options</DropdownMenuLabel>
+                        <DropdownMenuLabel>More Options</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => router.push(`/admin/room/${room.id}/edit`)}>Edit</DropdownMenuItem>
                         <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">Danger Zone</DropdownMenuLabel>
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(room.id)}>Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-3">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <Badge variant={room.publish_state === 'published' ? 'default' : 'secondary'}>
-                      {room.publish_state}
-                    </Badge>
-                    <Badge variant={room.session_state === 'open' ? 'default' : 'destructive'}>
-                      {room.session_state}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground ml-auto">
-                      {new Date(room.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => router.push(`/admin/room/${room.id}`)}
-                      className="text-xs flex-1 min-w-[80px]"
-                    >
-                      View
-                    </Button>
-                    {room.publish_state !== 'published' && (
-                      <Button 
-                        size="sm" 
-                        onClick={() => handlePublishStateChange(room.id, 'published')}
-                        className="text-xs bg-green-600 hover:bg-green-700 flex-1 min-w-[80px]"
-                      >
-                        Publish
-                      </Button>
-                    )}
-                    {room.publish_state !== 'draft' && (
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handlePublishStateChange(room.id, 'draft')}
-                        className="text-xs border-amber-600 text-amber-600 hover:bg-amber-50 flex-1 min-w-[80px]"
-                      >
-                        Draft
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {filteredRooms.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={8} className="h-24 text-center">
+                    No rooms found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 

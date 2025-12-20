@@ -228,11 +228,11 @@ export function CreateRoom(_props: Readonly<CreateRoomProps>) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Create New Room</h2>
-          <p className="text-sm md:text-base text-muted-foreground">Follow the steps to set up a new voting session.</p>
+          <h2 className="text-3xl font-bold tracking-tight">Create New Room</h2>
+          <p className="text-muted-foreground">Follow the steps to set up a new voting session.</p>
         </div>
         <div className="flex items-center gap-2">
           {[1, 2, 3].map(i => (

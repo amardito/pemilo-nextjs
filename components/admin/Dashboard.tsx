@@ -85,7 +85,7 @@ export function AdminDashboard({}: DashboardProps) {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Room Quota</CardTitle>
@@ -169,39 +169,37 @@ export function AdminDashboard({}: DashboardProps) {
         </CardContent>
       </Card>
       
-      {/* Full Table Preview - Hidden on mobile */}
+      {/* Full Table Preview */}
       {recentRooms.length > 0 && (
-        <Card className="hidden md:block">
+        <Card>
           <CardHeader>
             <CardTitle>All Rooms</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Room Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Publish State</TableHead>
-                    <TableHead>Created At</TableHead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Room Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Publish State</TableHead>
+                  <TableHead>Created At</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentRooms.map((room) => (
+                  <TableRow key={room.id}>
+                    <TableCell className="font-medium">{room.name}</TableCell>
+                    <TableCell className="capitalize">{room.voters_type.replace('_', ' ')}</TableCell>
+                    <TableCell>
+                      <Badge variant={room.publish_state === 'published' ? 'default' : (room.status === 'disabled' ? 'destructive' : 'secondary')}>
+                        {room.publish_state}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{new Date(room.created_at).toLocaleDateString()}</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentRooms.map((room) => (
-                    <TableRow key={room.id}>
-                      <TableCell className="font-medium">{room.name}</TableCell>
-                      <TableCell className="capitalize">{room.voters_type.replace('_', ' ')}</TableCell>
-                      <TableCell>
-                        <Badge variant={room.publish_state === 'published' ? 'default' : (room.status === 'disabled' ? 'destructive' : 'secondary')}>
-                          {room.publish_state}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{new Date(room.created_at).toLocaleDateString()}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       )}
