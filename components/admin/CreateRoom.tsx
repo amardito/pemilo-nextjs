@@ -412,7 +412,7 @@ function Step1RoomConfig({ roomData, setRoomData, randomPlaceholder }: Readonly<
       </div>
 
       {roomData.voters_type === 'wild_limited' && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="voters_limit">Voter Limit</Label>
             <Input 
@@ -436,7 +436,7 @@ function Step1RoomConfig({ roomData, setRoomData, randomPlaceholder }: Readonly<
       )}
 
       {roomData.voters_type === 'wild_unlimited' && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="start_time">Start Time</Label>
             <Input 
