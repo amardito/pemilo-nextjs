@@ -291,10 +291,10 @@ export function RoomDetail({ roomId }: Readonly<RoomDetailProps>) {
              </CardHeader>
              <CardContent className="space-y-4">
                <div className="p-3 bg-muted rounded text-xs break-all font-mono">
-                 https://pemilo.amardito.info?room={room.id}
+                 https://pemilo.amardito.info/voter/room/{room.id}
                </div>
                <Button variant="outline" className="w-full" onClick={() => {
-                 navigator.clipboard.writeText(`https://pemilo.amardito.info?room=${room.id}`);
+                 navigator.clipboard.writeText(`https://pemilo.amardito.info/voter/room/${room.id}`);
                  toast.success("Link copied!");
                }}>
                  <Copy className="mr-2 h-4 w-4" /> Copy Link
