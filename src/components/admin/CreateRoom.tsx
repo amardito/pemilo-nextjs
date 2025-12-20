@@ -132,7 +132,7 @@ function Step1Basic({ formData, updateField }: { formData: Partial<Room>, update
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Room Type</Label>
-          <Select value={formData.type} onValueChange={v => updateField('type', v)}>
+          <Select value={formData.type} onValueChange={(v: string) => updateField('type', v)}>
             <SelectTrigger>
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
@@ -151,7 +151,7 @@ function Step1Basic({ formData, updateField }: { formData: Partial<Room>, update
 
         <div className="space-y-2">
           <Label>Publish State</Label>
-          <RadioGroup value={formData.status} onValueChange={v => updateField('status', v)} className="flex gap-4">
+          <RadioGroup value={formData.status} onValueChange={(v: string) => updateField('status', v)} className="flex gap-4">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="draft" id="draft" />
               <Label htmlFor="draft">Draft</Label>
