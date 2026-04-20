@@ -91,6 +91,7 @@ export interface VoterDTO {
   has_voted: boolean;
   voted_at: string | null;
   status: string;
+  token?: string | null;
 }
 
 export interface VoterListResponse {

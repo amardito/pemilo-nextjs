@@ -8,7 +8,7 @@ import { api, ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { Upload, Download, Key, Search, AlertTriangle, Info } from "lucide-react";
+import { Upload, Download, Key, Search, AlertTriangle, Info, Copy, Check } from "lucide-react";
 import type { Event, VoterListResponse, ImportResult } from "@/lib/types";
 
 export default function VotersPage() {
@@ -39,6 +39,14 @@ export default function VotersPage() {
 
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [limitReached, setLimitReached] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  function handleCopyToken(voterId: string, token: string) {
+    navigator.clipboard.writeText(token).then(() => {
+      setCopiedId(voterId);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -258,18 +266,19 @@ export default function VotersPage() {
               <th className="px-4 py-2 text-left font-medium text-gray-600">Kelas</th>
               <th className="px-4 py-2 text-left font-medium text-gray-600">Status</th>
               <th className="px-4 py-2 text-left font-medium text-gray-600">Waktu Vote</th>
+              <th className="px-4 py-2 text-left font-medium text-gray-600">Token</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                   Memuat...
                 </td>
               </tr>
             ) : voters.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                   Tidak ada data pemilih
                 </td>
               </tr>
@@ -294,6 +303,29 @@ export default function VotersPage() {
                     {v.voted_at
                       ? new Date(v.voted_at).toLocaleString("id-ID")
                       : "-"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {v.token ? (
+                      <button
+                        onClick={() => handleCopyToken(v.id, v.token!)}
+                        title="Salin token"
+                        className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                      >
+                        {copiedId === v.id ? (
+                          <>
+                            <Check className="h-3.5 w-3.5 text-green-600" />
+                            <span className="text-green-600">Tersalin</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3.5 w-3.5" />
+                            <span>Salin</span>
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400">-</span>
+                    )}
                   </td>
                 </tr>
               ))
