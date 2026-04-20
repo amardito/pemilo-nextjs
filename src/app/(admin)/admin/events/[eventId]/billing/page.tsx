@@ -31,7 +31,9 @@ export default function BillingPage() {
     try {
       const res = (await api.payment.upgrade(eventId, pkg)) as ApiSuccessResponse<UpgradeResponse>;
       if (res.data?.payment_url) {
+        // Keep button disabled — page is redirecting to payment gateway.
         window.location.href = res.data.payment_url;
+        return;
       }
     } catch (err) {
       if (err instanceof ApiError) {
@@ -39,7 +41,6 @@ export default function BillingPage() {
       } else {
         setError("Gagal memproses upgrade");
       }
-    } finally {
       setLoading(false);
     }
   }

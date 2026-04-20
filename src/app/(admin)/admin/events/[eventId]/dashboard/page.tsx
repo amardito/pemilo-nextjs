@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useStats } from "@/lib/queries/stats";
+import { useStatsWS } from "@/lib/hooks/useStatsWS";
 import { useEvent } from "@/lib/queries/events";
 import { StatusBadge } from "@/components/ui/status-badge";
 import {
@@ -21,11 +21,11 @@ const COLORS = ["#3b82f6", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6", "#ec4899"
 export default function DashboardPage() {
   const { eventId } = useParams<{ eventId: string }>();
   const { data: eventData } = useEvent(eventId);
-  const { data: stats, isLoading } = useStats(eventId, 3000);
+  const { stats, status } = useStatsWS(eventId);
 
   const event = eventData?.data as Event | undefined;
 
-  if (isLoading || !stats) {
+  if (!stats) {
     return <p className="text-gray-500">Memuat dashboard...</p>;
   }
 
@@ -39,13 +39,29 @@ export default function DashboardPage() {
     votes: s.votes,
   }));
 
+  const dotClassMap: Record<string, string> = {
+    open: "inline-block w-2 h-2 rounded-full bg-green-500",
+    connecting: "inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse",
+    closed: "inline-block w-2 h-2 rounded-full bg-red-400",
+    error: "inline-block w-2 h-2 rounded-full bg-red-400",
+  };
+  const statusLabelMap: Record<string, string> = {
+    open: "Live",
+    connecting: "Menghubungkan…",
+    closed: "Terputus – mencoba kembali",
+    error: "Terputus – mencoba kembali",
+  };
+  const dotClass = dotClassMap[status] ?? dotClassMap["error"];
+  const statusLabel = statusLabelMap[status] ?? statusLabelMap["error"];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
         {event && <StatusBadge status={event.status} />}
-        <span className="text-xs text-gray-400 ml-auto">
-          Auto-refresh 3 detik
+        <span className="text-xs ml-auto flex items-center gap-1">
+          <span className={dotClass} />
+          <span className="text-gray-400">{statusLabel}</span>
         </span>
       </div>
 

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Modal } from "@/components/ui/modal";
-import { Plus, Trash2, UserPlus, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, UserPlus, AlertTriangle, Info } from "lucide-react";
 import { ApiError } from "@/lib/api";
 import type { Event, Slate } from "@/lib/types";
 
@@ -86,6 +86,31 @@ export default function SlatesPage() {
 
   return (
     <div className="space-y-6">
+      {/* Flow guide */}
+      <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+        <div className="flex items-start gap-2 mb-3">
+          <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
+          <p className="text-sm font-semibold text-blue-800">Cara menambahkan paslon</p>
+        </div>
+        <ol className="space-y-2 text-sm text-blue-900 ml-5 list-decimal">
+          <li>
+            <span className="font-medium">Tambah Paslon</span> — klik tombol <em>Tambah Paslon</em>, isi nomor urut, nama, visi, dan misi.
+          </li>
+          <li>
+            <span className="font-medium">Tambah Anggota</span> — setelah paslon dibuat, klik <em>Tambah Anggota</em> pada kartu paslon untuk mengisi jabatan dan nama (misal: Ketua, Wakil).
+          </li>
+          <li>
+            <span className="font-medium">Ulangi</span> — tambahkan semua paslon yang akan berkompetisi. Urutan nomor menentukan tampilan di halaman voting.
+          </li>
+          <li>
+            <span className="font-medium">Selanjutnya</span> — setelah semua paslon siap, lanjut ke halaman <em>Pemilih</em> untuk mengimpor daftar pemilih.
+          </li>
+        </ol>
+        <p className="mt-3 text-xs text-blue-700">
+          Paslon hanya bisa diubah selama event berstatus <span className="font-semibold">Draft</span> atau <span className="font-semibold">Scheduled</span>. Setelah dibuka, daftar paslon terkunci.
+        </p>
+      </div>
+
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Paslon</h1>
         {canEdit && (

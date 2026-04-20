@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMe } from "@/lib/queries/events";
 import { clearToken } from "@/lib/api";
-import { LayoutDashboard, Users, BarChart3, FileText, CreditCard, Settings, LogOut } from "lucide-react";
+import { Users, BarChart3, FileText, CreditCard, Settings, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function navItems(eventId: string) {
@@ -13,7 +13,6 @@ function navItems(eventId: string) {
     { href: `/admin/events/${eventId}/slates`, label: "Paslon", icon: Users },
     { href: `/admin/events/${eventId}/voters`, label: "Pemilih", icon: FileText },
     { href: `/admin/events/${eventId}/dashboard`, label: "Dashboard", icon: BarChart3 },
-    { href: `/admin/events/${eventId}/exports`, label: "Export", icon: LayoutDashboard },
     { href: `/admin/events/${eventId}/billing`, label: "Billing", icon: CreditCard },
   ];
 }

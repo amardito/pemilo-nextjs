@@ -8,7 +8,7 @@ import { api, ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { Upload, Download, Key, Search, AlertTriangle } from "lucide-react";
+import { Upload, Download, Key, Search, AlertTriangle, Info } from "lucide-react";
 import type { Event, VoterListResponse, ImportResult } from "@/lib/types";
 
 export default function VotersPage() {
@@ -89,6 +89,37 @@ export default function VotersPage() {
 
   return (
     <div className="space-y-6">
+      {/* Flow guide */}
+      <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+        <div className="flex items-start gap-2 mb-3">
+          <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
+          <p className="text-sm font-semibold text-blue-800">Cara menambahkan pemilih</p>
+        </div>
+        <ol className="space-y-2 text-sm text-blue-900 ml-5 list-decimal">
+          <li>
+            <span className="font-medium">Download template CSV</span> — klik tombol <em>Template CSV</em> untuk mendapatkan format yang benar.
+          </li>
+          <li>
+            <span className="font-medium">Isi data pemilih</span> — tambahkan baris untuk setiap pemilih dengan kolom <code className="bg-blue-100 px-1 rounded text-xs">full_name</code>, <code className="bg-blue-100 px-1 rounded text-xs">nim</code>, dan <code className="bg-blue-100 px-1 rounded text-xs">class_name</code>.
+          </li>
+          <li>
+            <span className="font-medium">Import CSV</span> — klik tombol <em>Import CSV</em> lalu pilih file yang sudah diisi. Data duplikat akan dilewati otomatis.
+          </li>
+          <li>
+            <span className="font-medium">Generate Token</span> — klik <em>Generate Token</em> untuk membuat kode unik setiap pemilih. Lakukan sekali sebelum event dibuka.
+          </li>
+          <li>
+            <span className="font-medium">Export Token</span> — download CSV token lalu bagikan ke masing-masing pemilih. Token digunakan untuk login di halaman voting.
+          </li>
+          <li>
+            <span className="font-medium">Buka event</span> — buka halaman <em>Setup</em> dan klik <em>Buka Voting</em>. Pemilih dapat mulai memilih setelah event dibuka.
+          </li>
+          <li>
+            <span className="font-medium">Pantau turnout</span> — gunakan <em>Export Turnout</em> untuk melihat siapa saja yang sudah memilih.
+          </li>
+        </ol>
+      </div>
+
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-xl font-bold text-gray-900">Pemilih</h1>
         <div className="flex gap-2 flex-wrap">
