@@ -7,7 +7,7 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.header}>
           <h1>Pemilo</h1>
-          <p>Mulai implementasi aplikasi pemilihan untuk Admin dan Pemilih.</p>
+          <p>Mulai implementasi aplikasi pemilihan untuk Panitia dan Pemilih.</p>
         </div>
         <section className={styles.grid}>
           <Link className={styles.card} href="/admin">
