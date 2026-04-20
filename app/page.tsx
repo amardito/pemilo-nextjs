@@ -11,7 +11,7 @@ export default function Home() {
         </div>
         <section className={styles.grid}>
           <Link className={styles.card} href="/admin">
-            <h2>Panitia / Admin</h2>
+            <h2>Panitia</h2>
             <p>Kelola event pemilihan, data kandidat, dan daftar pemilih.</p>
           </Link>
           <Link className={styles.card} href="/voter">

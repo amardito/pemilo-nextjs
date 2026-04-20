@@ -6,7 +6,7 @@ export default function AdminPage() {
     <div className={styles.wrapper}>
       <main className={styles.card}>
         <header className={styles.header}>
-          <h1>Dashboard Panitia / Admin</h1>
+          <h1>Dashboard Panitia</h1>
           <p>Fitur awal untuk pengelolaan proses pemilihan.</p>
         </header>
         <ul className={styles.list}>
