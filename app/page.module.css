@@ -1,0 +1,90 @@
+.page {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 24px;
+  background-color: #f3f6ff;
+}
+
+.main {
+  width: 100%;
+  max-width: 900px;
+  border-radius: 16px;
+  border: 1px solid #d6dfff;
+  background: #ffffff;
+  padding: 32px;
+}
+
+.header {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 32px;
+}
+
+.header p {
+  color: #4a4a4a;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #d6dfff;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.card h2 {
+  font-size: 20px;
+}
+
+.card p {
+  color: #4a4a4a;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    background: #f8faff;
+    border-color: #b9c9ff;
+  }
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    background-color: #0f1320;
+  }
+
+  .main {
+    background: #121933;
+    border-color: #2a3b75;
+  }
+
+  .header p,
+  .card p {
+    color: #d2d8ff;
+  }
+
+  .card {
+    border-color: #2a3b75;
+  }
+
+  .card:hover {
+    background: #1a2450;
+    border-color: #4861bf;
+  }
+}
