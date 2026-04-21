@@ -51,8 +51,8 @@ export default function AdminLayout({
 
   if (isLoading) {
     return (
-      <div suppressHydrationWarning className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-500">Memuat...</p>
+      <div suppressHydrationWarning className="flex min-h-screen items-center justify-center bg-[#0A0E26]">
+        <p className="text-[#5983D9]">Memuat...</p>
       </div>
     );
   }
@@ -60,27 +60,27 @@ export default function AdminLayout({
   if (isError) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0A0E26]">
       {/* Top nav */}
-      <header className="sticky top-0 z-40 border-b bg-white">
+      <header className="sticky top-0 z-40 border-b border-[#2E4CA6]/30 bg-[#0A0E26]/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <div className="flex items-center gap-2">
             {eventId && (
               <button
                 type="button"
-                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 md:hidden"
+                className="rounded-md p-2 text-[#5983D9] hover:bg-[#121D59] hover:text-[#e8eaf6] md:hidden"
                 onClick={() => setMobileSidebarOpen(true)}
                 aria-label="Buka menu"
               >
                 <Menu size={18} />
               </button>
             )}
-            <Link href="/admin/events" className="font-bold text-lg text-blue-600">
+            <Link href="/admin/events" className="font-extrabold text-lg text-[#EAF205] tracking-tight">
               Pemilo
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-[#5983D9]">
               {data?.data?.name}
             </span>
             <button
@@ -88,7 +88,7 @@ export default function AdminLayout({
                 clearToken();
                 router.push("/login");
               }}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-[#5983D9] hover:text-[#e8eaf6]"
               title="Logout"
             >
               <LogOut size={18} />
@@ -100,11 +100,11 @@ export default function AdminLayout({
       <div className="mx-auto max-w-7xl flex">
         {/* Sidebar (event-level pages only) */}
         {eventId && (
-          <aside className="hidden md:flex w-56 flex-col gap-1 border-r bg-white p-3 min-h-[calc(100vh-3.5rem)]">
+          <aside className="hidden md:flex w-56 flex-col gap-1 border-r border-[#2E4CA6]/30 bg-[#0A0E26] p-3 min-h-[calc(100vh-3.5rem)]">
             {currentEventTitle && (
-              <div className="mb-2 rounded-lg bg-blue-50 px-3 py-2">
-                <p className="text-xs uppercase tracking-wide text-blue-700">Event Aktif</p>
-                <p className="line-clamp-2 text-sm font-semibold text-blue-900">{currentEventTitle}</p>
+              <div className="mb-2 rounded-xl bg-[#121D59] border border-[#2E4CA6]/40 px-3 py-2">
+                <p className="text-xs uppercase tracking-wide text-[#5983D9]">Event Aktif</p>
+                <p className="line-clamp-2 text-sm font-semibold text-[#e8eaf6]">{currentEventTitle}</p>
               </div>
             )}
             {sidebarItems.map((item) => {
@@ -113,10 +113,10 @@ export default function AdminLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 rounded-r-lg border-l-2 px-3 py-2 text-sm transition-colors ${
+                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-all duration-150 ${
                     active
-                      ? "border-blue-600 bg-blue-50 text-blue-700 font-medium"
-                      : "border-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                      ? "border-[#EAF205]/30 bg-[#121D59] text-[#EAF205] font-medium shadow-[0_0_12px_rgba(234,242,5,0.1)]"
+                      : "border-transparent text-[#5983D9] hover:bg-[#121D59] hover:text-[#e8eaf6]"
                   }`}
                 >
                   <item.icon size={16} />
@@ -135,16 +135,16 @@ export default function AdminLayout({
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setMobileSidebarOpen(false)}
             aria-label="Tutup menu"
           />
-          <aside className="relative h-full w-72 max-w-[85vw] border-r bg-white p-4 shadow-xl">
+          <aside className="relative h-full w-72 max-w-[85vw] border-r border-[#2E4CA6]/40 bg-[#0A0E26] p-4 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <p className="font-semibold text-blue-600">Menu Event</p>
+              <p className="font-extrabold text-[#EAF205]">Menu Event</p>
               <button
                 type="button"
-                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-md p-2 text-[#5983D9] hover:bg-[#121D59] hover:text-[#e8eaf6]"
                 onClick={() => setMobileSidebarOpen(false)}
                 aria-label="Tutup sidebar"
               >
@@ -152,9 +152,9 @@ export default function AdminLayout({
               </button>
             </div>
             {currentEventTitle && (
-              <div className="mb-3 rounded-lg bg-blue-50 px-3 py-2">
-                <p className="text-xs uppercase tracking-wide text-blue-700">Event Aktif</p>
-                <p className="line-clamp-2 text-sm font-semibold text-blue-900">{currentEventTitle}</p>
+              <div className="mb-3 rounded-xl bg-[#121D59] border border-[#2E4CA6]/40 px-3 py-2">
+                <p className="text-xs uppercase tracking-wide text-[#5983D9]">Event Aktif</p>
+                <p className="line-clamp-2 text-sm font-semibold text-[#e8eaf6]">{currentEventTitle}</p>
               </div>
             )}
             <nav className="space-y-1">
@@ -165,10 +165,10 @@ export default function AdminLayout({
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileSidebarOpen(false)}
-                    className={`flex items-center gap-2 rounded-r-lg border-l-2 px-3 py-2 text-sm transition-colors ${
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-all ${
                       active
-                        ? "border-blue-600 bg-blue-50 text-blue-700 font-medium"
-                        : "border-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                        ? "border-[#EAF205]/30 bg-[#121D59] text-[#EAF205] font-medium"
+                        : "border-transparent text-[#5983D9] hover:bg-[#121D59] hover:text-[#e8eaf6]"
                     }`}
                   >
                     <item.icon size={16} />

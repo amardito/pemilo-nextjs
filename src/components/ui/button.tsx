@@ -13,15 +13,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled}
         className={cn(
-          "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E26] disabled:pointer-events-none disabled:opacity-40",
           {
-            "bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500":
+            "bg-[#EAF205] text-[#0A0E26] hover:bg-yellow-300 focus-visible:ring-[#EAF205] shadow-[0_0_16px_rgba(234,242,5,0.25)]":
               variant === "primary",
-            "bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500":
+            "bg-[#121D59] text-[#e8eaf6] border border-[#2E4CA6] hover:bg-[#2E4CA6] focus-visible:ring-[#5983D9]":
               variant === "secondary",
-            "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500":
+            "bg-red-600/80 text-white hover:bg-red-600 focus-visible:ring-red-500 border border-red-500/40":
               variant === "danger",
-            "text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-500":
+            "text-[#5983D9] hover:bg-[#121D59] focus-visible:ring-[#5983D9]":
               variant === "ghost",
           },
           {

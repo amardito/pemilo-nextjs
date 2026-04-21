@@ -15,13 +15,13 @@ export function Modal({ open, onClose, children, className }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="fixed inset-0 bg-black/50"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden
       />
       <div
         className={cn(
-          "relative z-50 w-full max-w-md rounded-xl bg-white p-6 shadow-xl",
+          "relative z-50 w-full max-w-md rounded-2xl bg-[#121D59] border border-[#2E4CA6] p-6 shadow-2xl shadow-black/50",
           className
         )}
       >
