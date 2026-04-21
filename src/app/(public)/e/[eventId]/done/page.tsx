@@ -18,9 +18,11 @@ export default function VoteDonePage() {
             type="button"
             onClick={() => {
               window.close();
-              if (window.history.length > 1) {
-                window.history.back();
-              }
+              setTimeout(() => {
+                if (!document.hidden && window.history.length > 1) {
+                  window.history.back();
+                }
+              }, 120);
             }}
             className="w-full rounded-lg bg-white px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >
