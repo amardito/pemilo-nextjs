@@ -16,7 +16,12 @@ export default function VoteDonePage() {
           </p>
           <button
             type="button"
-            onClick={() => window.close()}
+            onClick={() => {
+              window.close();
+              if (window.history.length > 1) {
+                window.history.back();
+              }
+            }}
             className="w-full rounded-lg bg-white px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >
             Tutup Halaman

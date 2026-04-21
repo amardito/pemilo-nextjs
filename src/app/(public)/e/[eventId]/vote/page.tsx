@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { api, ApiError } from "@/lib/api";
@@ -104,7 +105,15 @@ export default function VotePage() {
               >
                 <div className="flex items-start gap-3">
                   {slate.photo_url ? (
-                    <img src={slate.photo_url} alt={slate.name} className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-blue-100" />
+                    <Image
+                      src={slate.photo_url}
+                      alt={slate.name}
+                      width={48}
+                      height={48}
+                      unoptimized
+                      loader={({ src }) => src}
+                      className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-blue-100"
+                    />
                   ) : (
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white text-lg font-bold">
                       {slate.number}
