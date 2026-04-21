@@ -161,13 +161,13 @@ export default function VotersPage() {
             disabled={generateTokens.isPending}
           >
             <Key size={16} className="mr-1" />
-            {generateTokens.isPending ? "Generating..." : "Generate Token"}
+            {generateTokens.isPending ? "Membuat Token..." : "Generate Token"}
           </Button>
           <Button size="sm" variant="secondary" onClick={handleExportTokens}>
-            <Download size={16} className="mr-1" /> Export Token
+            <Download size={16} className="mr-1" /> Ekspor Token
           </Button>
           <Button size="sm" variant="secondary" onClick={handleExportTurnout}>
-            <Download size={16} className="mr-1" /> Export Turnout
+            <Download size={16} className="mr-1" /> Ekspor Turnout
           </Button>
         </div>
       </div>

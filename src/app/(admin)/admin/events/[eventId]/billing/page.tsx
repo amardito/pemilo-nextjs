@@ -47,7 +47,7 @@ export default function BillingPage() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <h1 className="text-xl font-bold text-[#FAF0EB]">Billing</h1>
+      <h1 className="text-xl font-bold text-[#FAF0EB]">Tagihan</h1>
 
       <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
         <p className="text-sm text-[#A69A97]">

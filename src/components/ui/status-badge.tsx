@@ -9,6 +9,14 @@ const statusStyles: Record<EventStatus, string> = {
   LOCKED: "bg-purple-900/30 text-purple-300 border border-purple-600/40",
 };
 
+const statusLabels: Record<EventStatus, string> = {
+  DRAFT: "Draf",
+  SCHEDULED: "Terjadwal",
+  OPEN: "Dibuka",
+  CLOSED: "Ditutup",
+  LOCKED: "Terkunci",
+};
+
 export function StatusBadge({
   status,
   className,
@@ -24,7 +32,7 @@ export function StatusBadge({
         className
       )}
     >
-      {status}
+      {statusLabels[status]}
     </span>
   );
 }

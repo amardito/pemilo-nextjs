@@ -9,11 +9,11 @@ import { useEffect, useState } from "react";
 
 function navItems(eventId: string) {
   return [
-    { href: `/admin/events/${eventId}/setup`, label: "Setup", icon: Settings },
+    { href: `/admin/events/${eventId}/setup`, label: "Pengaturan", icon: Settings },
     { href: `/admin/events/${eventId}/slates`, label: "Paslon", icon: Users },
     { href: `/admin/events/${eventId}/voters`, label: "Pemilih", icon: FileText },
     { href: `/admin/events/${eventId}/dashboard`, label: "Dashboard", icon: BarChart3 },
-    { href: `/admin/events/${eventId}/billing`, label: "Billing", icon: CreditCard },
+    { href: `/admin/events/${eventId}/billing`, label: "Tagihan", icon: CreditCard },
   ];
 }
 
@@ -89,7 +89,7 @@ export default function AdminLayout({
                 router.push("/login");
               }}
               className="text-[#A69A97] hover:text-[#FAF0EB]"
-              title="Logout"
+              title="Keluar"
             >
               <LogOut size={18} />
             </button>

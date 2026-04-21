@@ -41,7 +41,7 @@ export default function EventSetupPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
-        <h1 className="text-xl font-bold text-[#FAF0EB]">Setup Event</h1>
+        <h1 className="text-xl font-bold text-[#FAF0EB]">Pengaturan Event</h1>
         <StatusBadge status={event.status} />
       </div>
 
@@ -66,7 +66,9 @@ export default function EventSetupPage() {
       <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6 space-y-3">
         <h2 className="font-semibold text-[#FAF0EB]">Status Event</h2>
         <p className="text-sm text-[#A69A97]">
-          Status saat ini: <span className="font-medium text-[#FAF0EB]">{event.status}</span>
+          Status saat ini: <span className="font-medium text-[#FAF0EB]">
+            {{ DRAFT: "Draf", SCHEDULED: "Terjadwal", OPEN: "Dibuka", CLOSED: "Ditutup", LOCKED: "Terkunci" }[event.status] ?? event.status}
+          </span>
         </p>
 
         <div className="flex flex-wrap gap-2">
