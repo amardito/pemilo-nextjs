@@ -91,21 +91,17 @@ export default function VotePage() {
           {session.slates.map((slate) => (
             <div
               key={slate.id}
-              role="button"
-              tabIndex={0}
-              onClick={() => setSelected(slate.id)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setSelected(slate.id);
-                }
-              }}
-              className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
+              className={`w-full rounded-xl border-2 p-4 transition-all ${
                 selected === slate.id
                   ? "border-blue-500 bg-blue-50 shadow-md"
                   : "border-gray-200 bg-white hover:border-gray-300"
               }`}
             >
+              <button
+                type="button"
+                onClick={() => setSelected(slate.id)}
+                className="w-full text-left"
+              >
                 <div className="flex items-start gap-3">
                   {slate.photo_url ? (
                     <img src={slate.photo_url} alt={slate.name} className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-blue-100" />
@@ -119,54 +115,18 @@ export default function VotePage() {
                       Paslon #{slate.number} — {slate.name}
                     </h3>
 
-                  {/* Members */}
-                  {slate.members.length > 0 && (
-                    <ul className="mt-1 space-y-0.5">
-                      {slate.members.map((m, i) => (
-                        <li key={i} className="text-sm text-gray-600">
-                          <span className="font-medium">{m.role}:</span> {m.full_name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {/* Vision/Mission expandable */}
-                    {(slate.vision || slate.mission) && (
-                      <div className="mt-3 rounded-lg border bg-gray-50">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setExpandedSlate((prev) => (prev === slate.id ? null : slate.id));
-                          }}
-                          className="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-medium text-blue-700"
-                        >
-                          <span>Lihat Visi & Misi</span>
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform ${expandedSlate === slate.id ? "rotate-180" : ""}`}
-                          />
-                        </button>
-                        {expandedSlate === slate.id && (
-                          <div className="space-y-2 border-t px-3 py-2 text-sm text-gray-600">
-                            {slate.vision && (
-                              <p>
-                                <span className="font-medium">Visi:</span> {slate.vision}
-                              </p>
-                            )}
-                            {slate.mission && (
-                              <p>
-                                <span className="font-medium">Misi:</span> {slate.mission}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
+                    {slate.members.length > 0 && (
+                      <ul className="mt-1 space-y-0.5">
+                        {slate.members.map((m, i) => (
+                          <li key={i} className="text-sm text-gray-600">
+                            <span className="font-medium">{m.role}:</span> {m.full_name}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </div>
 
-                {/* Radio indicator */}
-                <div
+                  <div
                     className={`mt-1 h-6 w-6 shrink-0 rounded-full border-2 flex items-center justify-center ${
                       selected === slate.id
                         ? "border-blue-600 ring-4 ring-blue-100"
@@ -180,6 +140,36 @@ export default function VotePage() {
                     )}
                   </div>
                 </div>
+              </button>
+              {(slate.vision || slate.mission) && (
+                <div className="mt-3 rounded-lg border bg-gray-50">
+                  <button
+                    type="button"
+                    onClick={() => setExpandedSlate((prev) => (prev === slate.id ? null : slate.id))}
+                    className="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-medium text-blue-700"
+                  >
+                    <span>Lihat Visi & Misi</span>
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform ${expandedSlate === slate.id ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {expandedSlate === slate.id && (
+                    <div className="space-y-2 border-t px-3 py-2 text-sm text-gray-600">
+                      {slate.vision && (
+                        <p>
+                          <span className="font-medium">Visi:</span> {slate.vision}
+                        </p>
+                      )}
+                      {slate.mission && (
+                        <p>
+                          <span className="font-medium">Misi:</span> {slate.mission}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

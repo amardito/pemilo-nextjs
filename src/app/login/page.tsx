@@ -69,10 +69,12 @@ export default function AdminLoginPage() {
             <p className="text-xl font-bold text-blue-600">Pemilo</p>
           </div>
 
-          <div className="mb-5 rounded-lg bg-gray-100 p-1">
+          <div className="mb-5 rounded-lg bg-gray-100 p-1" role="tablist" aria-label="Mode autentikasi">
             <div className="grid grid-cols-2 gap-1">
               <button
                 type="button"
+                role="tab"
+                aria-selected={!isRegister}
                 onClick={() => {
                   setIsRegister(false);
                   setError("");
@@ -85,6 +87,8 @@ export default function AdminLoginPage() {
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={isRegister}
                 onClick={() => {
                   setIsRegister(true);
                   setError("");
