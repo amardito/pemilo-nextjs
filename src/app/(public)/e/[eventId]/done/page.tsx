@@ -2,7 +2,7 @@
 
 import { CheckCircle } from "lucide-react";
 
-const CLOSE_FALLBACK_DELAY_MS = 120;
+const CLOSE_FALLBACK_DELAY_MILLISECONDS = 700;
 
 export default function VoteDonePage() {
   return (
@@ -24,7 +24,7 @@ export default function VoteDonePage() {
                 if (!document.hidden && window.history.length > 1) {
                   window.history.back();
                 }
-              }, CLOSE_FALLBACK_DELAY_MS);
+              }, CLOSE_FALLBACK_DELAY_MILLISECONDS);
             }}
             className="w-full rounded-lg bg-white px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >

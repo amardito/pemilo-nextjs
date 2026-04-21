@@ -38,6 +38,17 @@ export default function AdminLayout({
     }
   }, [isLoading, isError, router]);
 
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMobileSidebarOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileSidebarOpen]);
+
   if (isLoading) {
     return (
       <div suppressHydrationWarning className="flex min-h-screen items-center justify-center">
@@ -124,6 +135,7 @@ export default function AdminLayout({
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
+            tabIndex={-1}
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileSidebarOpen(false)}
             aria-label="Tutup menu"
