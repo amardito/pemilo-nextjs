@@ -21,7 +21,7 @@ export function Modal({ open, onClose, children, className }: ModalProps) {
       />
       <div
         className={cn(
-          "relative z-50 w-full max-w-md rounded-2xl bg-[#121D59] border border-[#2E4CA6] p-6 shadow-2xl shadow-black/50",
+          "relative z-50 w-full max-w-md rounded-2xl bg-[#321F14] border border-[#F26241]/50 p-6 shadow-2xl shadow-black/50",
           className
         )}
       >

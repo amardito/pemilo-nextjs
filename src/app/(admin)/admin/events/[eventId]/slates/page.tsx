@@ -82,65 +82,65 @@ export default function SlatesPage() {
     setAddMemberSlateId(null);
   }
 
-  if (isLoading) return <p className="text-[#5983D9]">Memuat...</p>;
+  if (isLoading) return <p className="text-[#A69A97]">Memuat...</p>;
 
   return (
     <div className="space-y-6">
       {/* Flow guide */}
-      <div className="rounded-2xl border border-[#2E4CA6]/50 bg-[#121D59] p-4">
+      <div className="rounded-2xl border border-[#F26241]/40 bg-[#321F14] p-4">
         <div className="flex items-start gap-2 mb-3">
-          <Info size={16} className="text-[#5983D9] shrink-0 mt-0.5" />
-          <p className="text-sm font-semibold text-[#e8eaf6]">Cara menambahkan paslon</p>
+          <Info size={16} className="text-[#A69A97] shrink-0 mt-0.5" />
+          <p className="text-sm font-semibold text-[#FAF0EB]">Cara menambahkan pasangan kandidat</p>
         </div>
-        <ol className="space-y-2 text-sm text-[#5983D9] ml-5 list-decimal">
+        <ol className="space-y-2 text-sm text-[#A69A97] ml-5 list-decimal">
           <li>
-            <span className="font-medium text-[#e8eaf6]">Tambah Paslon</span> — klik tombol <em>Tambah Paslon</em>, isi nomor urut, nama, visi, dan misi.
+            <span className="font-medium text-[#FAF0EB]">Tambah Pasangan</span> — klik tombol <em>Tambah Pasangan</em>, isi nomor urut, nama, visi, dan misi.
           </li>
           <li>
-            <span className="font-medium text-[#e8eaf6]">Tambah Anggota</span> — setelah paslon dibuat, klik <em>Tambah Anggota</em> pada kartu paslon untuk mengisi jabatan dan nama (misal: Ketua, Wakil).
+            <span className="font-medium text-[#FAF0EB]">Tambah Anggota</span> — setelah pasangan dibuat, klik <em>Tambah Anggota</em> pada kartu pasangan untuk mengisi jabatan dan nama (misal: Ketua, Wakil).
           </li>
           <li>
-            <span className="font-medium text-[#e8eaf6]">Ulangi</span> — tambahkan semua paslon yang akan berkompetisi. Urutan nomor menentukan tampilan di halaman voting.
+            <span className="font-medium text-[#FAF0EB]">Ulangi</span> — tambahkan semua pasangan yang akan berkompetisi. Urutan nomor menentukan tampilan di halaman voting.
           </li>
           <li>
-            <span className="font-medium text-[#e8eaf6]">Selanjutnya</span> — setelah semua paslon siap, lanjut ke halaman <em>Pemilih</em> untuk mengimpor daftar pemilih.
+            <span className="font-medium text-[#FAF0EB]">Selanjutnya</span> — setelah semua pasangan siap, lanjut ke halaman <em>Pemilih</em> untuk mengimpor daftar pemilih.
           </li>
         </ol>
-        <p className="mt-3 text-xs text-[#5983D9]/70">
-          Paslon hanya bisa diubah selama event berstatus <span className="font-semibold text-[#e8eaf6]">Draft</span> atau <span className="font-semibold text-[#e8eaf6]">Scheduled</span>. Setelah dibuka, daftar paslon terkunci.
+        <p className="mt-3 text-xs text-[#A69A97]/70">
+          Pasangan hanya bisa diubah selama event berstatus <span className="font-semibold text-[#FAF0EB]">Draft</span> atau <span className="font-semibold text-[#FAF0EB]">Scheduled</span>. Setelah dibuka, daftar pasangan terkunci.
         </p>
       </div>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-[#e8eaf6]">Paslon</h1>
+        <h1 className="text-xl font-bold text-[#FAF0EB]">Pasangan Kandidat</h1>
         {canEdit && (
           <Button size="sm" onClick={() => { setNewNumber(slates.length + 1); setShowAdd(true); }}>
-            <Plus size={16} className="mr-1" /> Tambah Paslon
+            <Plus size={16} className="mr-1" /> Tambah Pasangan
           </Button>
         )}
       </div>
 
       {slates.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#2E4CA6]/50 p-12 text-center">
-          <p className="text-[#5983D9]">Belum ada paslon. Tambahkan paslon pertama!</p>
+        <div className="rounded-2xl border-2 border-dashed border-[#F26241]/40 p-12 text-center">
+          <p className="text-[#A69A97]">Belum ada pasangan kandidat. Tambahkan pasangan pertama!</p>
         </div>
       ) : (
         <div className="space-y-4">
           {slates.map((slate) => (
-            <div key={slate.id} className="rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-4">
+            <div key={slate.id} className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-[#e8eaf6]">
-                    Paslon #{slate.number} — {slate.name}
+                  <h3 className="font-semibold text-[#FAF0EB]">
+                    Pasangan #{slate.number} — {slate.name}
                   </h3>
                   {slate.vision && (
-                    <p className="mt-1 text-sm text-[#5983D9]">
-                      <span className="font-medium text-[#e8eaf6]">Visi:</span> {slate.vision}
+                    <p className="mt-1 text-sm text-[#A69A97]">
+                      <span className="font-medium text-[#FAF0EB]">Visi:</span> {slate.vision}
                     </p>
                   )}
                   {slate.mission && (
-                    <p className="mt-1 text-sm text-[#5983D9]">
-                      <span className="font-medium text-[#e8eaf6]">Misi:</span> {slate.mission}
+                    <p className="mt-1 text-sm text-[#A69A97]">
+                      <span className="font-medium text-[#FAF0EB]">Misi:</span> {slate.mission}
                     </p>
                   )}
                 </div>
@@ -149,7 +149,7 @@ export default function SlatesPage() {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      if (confirm("Hapus paslon ini?")) deleteSlate.mutate(slate.id);
+                      if (confirm("Hapus pasangan ini?")) deleteSlate.mutate(slate.id);
                     }}
                   >
                     <Trash2 size={16} className="text-red-400" />
@@ -159,14 +159,14 @@ export default function SlatesPage() {
 
               {/* Members */}
               <div className="mt-3 space-y-1">
-                <p className="text-xs font-medium text-[#5983D9]/70 uppercase">Anggota</p>
+                <p className="text-xs font-medium text-[#A69A97]/70 uppercase">Anggota</p>
                 {slate.members?.length > 0 ? (
                   <ul className="space-y-1">
                     {slate.members.map((m) => (
                       <li key={m.id} className="flex items-center justify-between text-sm">
                         <span>
-                          <span className="font-medium text-[#e8eaf6]">{m.role}:</span>{" "}
-                          <span className="text-[#5983D9]">{m.full_name}</span>
+                          <span className="font-medium text-[#FAF0EB]">{m.role}:</span>{" "}
+                          <span className="text-[#A69A97]">{m.full_name}</span>
                         </span>
                         {canEdit && (
                           <button
@@ -182,7 +182,7 @@ export default function SlatesPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-sm text-[#5983D9]/50">Belum ada anggota</p>
+                  <p className="text-sm text-[#A69A97]/50">Belum ada anggota</p>
                 )}
                 {canEdit && (
                   <Button
@@ -202,7 +202,7 @@ export default function SlatesPage() {
 
       {/* Add Slate Modal */}
       <Modal open={showAdd} onClose={() => { setShowAdd(false); setAddError(""); setLimitReached(false); }}>
-        <h2 className="text-lg font-semibold mb-4 text-[#e8eaf6]">Tambah Paslon</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#FAF0EB]">Tambah Pasangan Kandidat</h2>
 
         {limitReached ? (
           <div className="space-y-4">
@@ -212,7 +212,7 @@ export default function SlatesPage() {
                 <p className="font-medium text-amber-300">Batas paket tercapai</p>
                 <p className="mt-1 text-sm text-amber-400/80">
                   Paket <span className="font-semibold">{event?.package}</span> hanya mendukung maksimal{" "}
-                  <span className="font-semibold">{event?.max_slates} paslon</span>. Upgrade paket untuk menambah lebih banyak paslon.
+                  <span className="font-semibold">{event?.max_slates} pasangan</span>. Upgrade paket untuk menambah lebih banyak pasangan.
                 </p>
               </div>
             </div>
@@ -226,19 +226,19 @@ export default function SlatesPage() {
         ) : (
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-[#5983D9] mb-1">No. Urut</label>
+              <label className="block text-sm font-medium text-[#A69A97] mb-1">No. Urut</label>
               <Input type="number" min={1} value={newNumber} onChange={(e) => setNewNumber(Number(e.target.value))} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#5983D9] mb-1">Nama Paslon</label>
+              <label className="block text-sm font-medium text-[#A69A97] mb-1">Nama Pasangan</label>
               <Input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Misal: Ahmad & Budi" autoFocus />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#5983D9] mb-1">Visi</label>
+              <label className="block text-sm font-medium text-[#A69A97] mb-1">Visi</label>
               <Textarea value={newVision} onChange={(e) => setNewVision(e.target.value)} rows={2} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#5983D9] mb-1">Misi</label>
+              <label className="block text-sm font-medium text-[#A69A97] mb-1">Misi</label>
               <Textarea value={newMission} onChange={(e) => setNewMission(e.target.value)} rows={2} />
             </div>
             {addError && <p className="text-sm text-red-400">{addError}</p>}
@@ -254,14 +254,14 @@ export default function SlatesPage() {
 
       {/* Add Member Modal */}
       <Modal open={!!addMemberSlateId} onClose={() => setAddMemberSlateId(null)}>
-        <h2 className="text-lg font-semibold mb-4 text-[#e8eaf6]">Tambah Anggota</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#FAF0EB]">Tambah Anggota</h2>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-[#5983D9] mb-1">Jabatan</label>
+            <label className="block text-sm font-medium text-[#A69A97] mb-1">Jabatan</label>
             <Input value={memberRole} onChange={(e) => setMemberRole(e.target.value)} placeholder="Ketua / Wakil / ..." />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#5983D9] mb-1">Nama Lengkap</label>
+            <label className="block text-sm font-medium text-[#A69A97] mb-1">Nama Lengkap</label>
             <Input value={memberName} onChange={(e) => setMemberName(e.target.value)} placeholder="Nama anggota" autoFocus />
           </div>
         </div>

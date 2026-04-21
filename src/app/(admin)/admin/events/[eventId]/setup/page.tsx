@@ -29,7 +29,7 @@ export default function EventSetupPage() {
     }
   }, [event]);
 
-  if (isLoading) return <p className="text-[#5983D9]">Memuat...</p>;
+  if (isLoading) return <p className="text-[#A69A97]">Memuat...</p>;
   if (!event) return <p className="text-red-400">Event tidak ditemukan</p>;
 
   const canEdit = event.status === "DRAFT" || event.status === "SCHEDULED";
@@ -41,17 +41,17 @@ export default function EventSetupPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
-        <h1 className="text-xl font-bold text-[#e8eaf6]">Setup Event</h1>
+        <h1 className="text-xl font-bold text-[#FAF0EB]">Setup Event</h1>
         <StatusBadge status={event.status} />
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6">
+      <div className="space-y-4 rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
         <div>
-          <label className="block text-sm font-medium text-[#5983D9] mb-1">Judul</label>
+          <label className="block text-sm font-medium text-[#A69A97] mb-1">Judul</label>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} disabled={!canEdit} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-[#5983D9] mb-1">Deskripsi</label>
+          <label className="block text-sm font-medium text-[#A69A97] mb-1">Deskripsi</label>
           <Textarea value={description} onChange={(e) => setDescription(e.target.value)} disabled={!canEdit} />
         </div>
 
@@ -63,10 +63,10 @@ export default function EventSetupPage() {
       </div>
 
       {/* Status transitions */}
-      <div className="rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6 space-y-3">
-        <h2 className="font-semibold text-[#e8eaf6]">Status Event</h2>
-        <p className="text-sm text-[#5983D9]">
-          Status saat ini: <span className="font-medium text-[#e8eaf6]">{event.status}</span>
+      <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6 space-y-3">
+        <h2 className="font-semibold text-[#FAF0EB]">Status Event</h2>
+        <p className="text-sm text-[#A69A97]">
+          Status saat ini: <span className="font-medium text-[#FAF0EB]">{event.status}</span>
         </p>
 
         <div className="flex flex-wrap gap-2">
@@ -88,17 +88,17 @@ export default function EventSetupPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6">
-        <h2 className="font-semibold text-[#e8eaf6] mb-2">Info Paket</h2>
-        <p className="text-sm text-[#5983D9]">
-          Paket: <span className="font-medium text-[#e8eaf6]">{event.package}</span> &middot;
-          Max {event.max_slates} paslon &middot; Max {event.max_voters} pemilih
+      <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
+        <h2 className="font-semibold text-[#FAF0EB] mb-2">Info Paket</h2>
+        <p className="text-sm text-[#A69A97]">
+          Paket: <span className="font-medium text-[#FAF0EB]">{event.package}</span> &middot;
+          Max {event.max_slates} pasangan &middot; Max {event.max_voters} pemilih
         </p>
       </div>
 
-      <div className="rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6">
-        <h2 className="font-semibold text-[#e8eaf6] mb-2">Link Voting Publik</h2>
-        <code className="block rounded-xl bg-[#0A0E26] border border-[#2E4CA6]/30 p-2 text-sm break-all text-[#5983D9]">
+      <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
+        <h2 className="font-semibold text-[#FAF0EB] mb-2">Link Voting Publik</h2>
+        <code className="block rounded-xl bg-[#261C16] border border-[#F26241]/20 p-2 text-sm break-all text-[#A69A97]">
           {typeof window !== "undefined" ? `${window.location.origin}/e/${eventId}` : `/e/${eventId}`}
         </code>
       </div>

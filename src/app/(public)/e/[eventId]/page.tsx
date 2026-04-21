@@ -36,13 +36,13 @@ export default function EventLandingPage() {
 
   if (loading) {
     return (
-      <div suppressHydrationWarning className="min-h-screen flex items-center justify-center bg-[#0A0E26] px-4">
-        <div className="w-full max-w-md space-y-4 rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6">
-          <Skeleton className="mx-auto h-14 w-14 rounded-full bg-[#2E4CA6]/40" />
-          <Skeleton className="h-7 w-3/4 mx-auto bg-[#2E4CA6]/30" />
-          <Skeleton className="h-4 w-full bg-[#2E4CA6]/20" />
-          <Skeleton className="h-4 w-5/6 mx-auto bg-[#2E4CA6]/20" />
-          <Skeleton className="h-11 w-full rounded-lg bg-[#2E4CA6]/30" />
+      <div suppressHydrationWarning className="min-h-screen flex items-center justify-center bg-[#261C16] px-4">
+        <div className="w-full max-w-md space-y-4 rounded-2xl border border-[#F26241]/40 bg-[#321F14] p-6">
+          <Skeleton className="mx-auto h-14 w-14 rounded-full bg-[#F26241]/40" />
+          <Skeleton className="h-7 w-3/4 mx-auto bg-[#F26241]/30" />
+          <Skeleton className="h-4 w-full bg-[#F26241]/20" />
+          <Skeleton className="h-4 w-5/6 mx-auto bg-[#F26241]/20" />
+          <Skeleton className="h-11 w-full rounded-lg bg-[#F26241]/30" />
         </div>
       </div>
     );
@@ -50,10 +50,10 @@ export default function EventLandingPage() {
 
   if (error || !event) {
     return (
-      <div suppressHydrationWarning className="min-h-screen flex items-center justify-center bg-[#0A0E26] px-4">
-        <div className="w-full max-w-md rounded-2xl bg-[#121D59] border border-[#2E4CA6]/40 p-6 text-center shadow-xl">
-          <h1 className="text-xl font-bold text-[#e8eaf6]">Oops!</h1>
-          <p className="mt-2 text-[#5983D9]">{error || "Event tidak ditemukan"}</p>
+      <div suppressHydrationWarning className="min-h-screen flex items-center justify-center bg-[#261C16] px-4">
+        <div className="w-full max-w-md rounded-2xl bg-[#321F14] border border-[#F26241]/40 p-6 text-center shadow-xl">
+          <h1 className="text-xl font-bold text-[#FAF0EB]">Oops!</h1>
+          <p className="mt-2 text-[#A69A97]">{error || "Event tidak ditemukan"}</p>
         </div>
       </div>
     );
@@ -63,14 +63,14 @@ export default function EventLandingPage() {
   const isClosed = event.status === "CLOSED" || event.status === "LOCKED";
 
   return (
-    <div suppressHydrationWarning className="min-h-screen flex flex-col justify-between bg-[#0A0E26] px-4 py-8 text-[#e8eaf6]">
+    <div suppressHydrationWarning className="min-h-screen flex flex-col justify-between bg-[#261C16] px-4 py-8 text-[#FAF0EB]">
       <div className="flex-1 flex items-center justify-center">
-        <div className="w-full max-w-xl text-center space-y-6 rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6 shadow-2xl sm:p-8">
+        <div className="w-full max-w-xl text-center space-y-6 rounded-2xl border border-[#F26241]/40 bg-[#321F14] p-6 shadow-2xl sm:p-8">
           <div className="text-6xl">🗳️</div>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-[#e8eaf6]">{event.title}</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-[#FAF0EB]">{event.title}</h1>
             {event.description && (
-              <p className="mt-3 text-sm text-[#5983D9] sm:text-base">{event.description}</p>
+              <p className="mt-3 text-sm text-[#A69A97] sm:text-base">{event.description}</p>
             )}
           </div>
 
@@ -99,7 +99,7 @@ export default function EventLandingPage() {
           ) : null}
         </div>
       </div>
-      <p className="mt-6 text-center text-xs text-[#5983D9]/60">Powered by Pemilo</p>
+      <p className="mt-6 text-center text-xs text-[#A69A97]/60">Powered by Pemilo</p>
     </div>
   );
 }

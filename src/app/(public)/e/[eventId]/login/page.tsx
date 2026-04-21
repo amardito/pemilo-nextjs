@@ -51,21 +51,21 @@ export default function VoterLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A0E26] px-4 py-8">
-      <div className="w-full max-w-md space-y-6 rounded-2xl bg-[#121D59] border border-[#2E4CA6]/40 p-6 shadow-2xl sm:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#261C16] px-4 py-8">
+      <div className="w-full max-w-md space-y-6 rounded-2xl bg-[#321F14] border border-[#F26241]/30 p-6 shadow-2xl sm:p-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#e8eaf6]">Masuk sebagai Pemilih</h1>
-          <p className="mt-1 text-sm text-[#5983D9]">
-            Masukkan token dan NIM untuk memilih
+          <h1 className="text-2xl font-bold text-[#FAF0EB]">Masuk sebagai Pemilih</h1>
+          <p className="mt-1 text-sm text-[#A69A97]">
+            Masukkan token dan ID Pemilih untuk memilih
           </p>
-          <p className="mt-2 text-xs text-[#5983D9]/60">
+          <p className="mt-2 text-xs text-[#A69A97]/60">
             Token diberikan oleh panitia. Gunakan token unik milikmu.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#5983D9] mb-1">
+            <label className="block text-sm font-medium text-[#A69A97] mb-1">
               Token
             </label>
             <Input
@@ -84,17 +84,17 @@ export default function VoterLoginPage() {
               autoFocus
               required
             />
-            <p className="mt-1 text-xs text-[#5983D9]/60">8 karakter, huruf/angka</p>
+            <p className="mt-1 text-xs text-[#A69A97]/60">8 karakter, huruf/angka</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#5983D9] mb-1">
-              NIM
+            <label className="block text-sm font-medium text-[#A69A97] mb-1">
+              ID Pemilih
             </label>
             <Input
               value={nim}
               onChange={(e) => setNim(e.target.value)}
-              placeholder="Masukkan NIM"
+              placeholder="Masukkan ID Pemilih"
               maxLength={50}
               required
             />

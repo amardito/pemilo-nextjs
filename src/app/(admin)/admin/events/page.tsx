@@ -28,17 +28,17 @@ export default function EventsListPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-[#e8eaf6]">Event Pemilihan</h1>
+        <h1 className="text-xl font-bold text-[#FAF0EB]">Event Pemilihan</h1>
         <Button onClick={() => setShowCreate(true)} size="sm">
           <Plus size={16} className="mr-1" /> Buat Event
         </Button>
       </div>
 
       {isLoading ? (
-        <p className="text-[#5983D9]">Memuat...</p>
+        <p className="text-[#A69A97]">Memuat...</p>
       ) : events.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#2E4CA6]/50 p-12 text-center">
-          <p className="text-[#5983D9]">Belum ada event. Buat event pertamamu!</p>
+        <div className="rounded-2xl border-2 border-dashed border-[#F26241]/40 p-12 text-center">
+          <p className="text-[#A69A97]">Belum ada event. Buat event pertamamu!</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,18 +46,18 @@ export default function EventsListPage() {
             <Link
               key={event.id}
               href={`/admin/events/${event.id}/setup`}
-              className="block rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-4 shadow-lg hover:border-[#5983D9]/60 hover:bg-[#121D59]/80 transition-all duration-200"
+              className="block rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-4 shadow-lg hover:border-[#F26241]/60 hover:bg-[#321F14]/80 transition-all duration-200"
             >
               <div className="flex items-start justify-between">
-                <h2 className="font-semibold text-[#e8eaf6] line-clamp-1">
+                <h2 className="font-semibold text-[#FAF0EB] line-clamp-1">
                   {event.title}
                 </h2>
                 <StatusBadge status={event.status} />
               </div>
-              <p className="mt-2 text-xs text-[#5983D9]">
+              <p className="mt-2 text-xs text-[#A69A97]">
                 Paket: {event.package} &middot; Max {event.max_voters} pemilih
               </p>
-              <p className="mt-1 text-xs text-[#5983D9]/50">
+              <p className="mt-1 text-xs text-[#A69A97]/50">
                 {new Date(event.created_at).toLocaleDateString("id-ID")}
               </p>
             </Link>
@@ -66,7 +66,7 @@ export default function EventsListPage() {
       )}
 
       <Modal open={showCreate} onClose={() => setShowCreate(false)}>
-        <h2 className="text-lg font-semibold mb-4 text-[#e8eaf6]">Buat Event Baru</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#FAF0EB]">Buat Event Baru</h2>
         <Input
           placeholder="Judul event, misal: Pemilihan Ketua OSIS 2026"
           value={title}

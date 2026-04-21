@@ -22,7 +22,7 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  if (isLoading) return <p className="text-[#5983D9]">Memuat...</p>;
+  if (isLoading) return <p className="text-[#A69A97]">Memuat...</p>;
   if (!event) return <p className="text-red-400">Event tidak ditemukan</p>;
 
   async function handleUpgrade(pkg: PackageType) {
@@ -47,14 +47,14 @@ export default function BillingPage() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <h1 className="text-xl font-bold text-[#e8eaf6]">Billing</h1>
+      <h1 className="text-xl font-bold text-[#FAF0EB]">Billing</h1>
 
-      <div className="rounded-2xl border border-[#2E4CA6]/40 bg-[#121D59] p-6">
-        <p className="text-sm text-[#5983D9]">
-          Paket saat ini: <span className="font-semibold text-[#e8eaf6]">{event.package}</span>
+      <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
+        <p className="text-sm text-[#A69A97]">
+          Paket saat ini: <span className="font-semibold text-[#FAF0EB]">{event.package}</span>
         </p>
-        <p className="text-sm text-[#5983D9]/70 mt-1">
-          Max {event.max_slates} paslon &middot; Max {event.max_voters} pemilih
+        <p className="text-sm text-[#A69A97]/70 mt-1">
+          Max {event.max_slates} pasangan &middot; Max {event.max_voters} pemilih
         </p>
       </div>
 
@@ -72,18 +72,18 @@ export default function BillingPage() {
               key={key}
               className={`rounded-2xl border p-5 transition-all ${
                 isCurrent
-                  ? "border-[#EAF205]/40 bg-[#121D59] shadow-[0_0_20px_rgba(234,242,5,0.1)]"
-                  : "border-[#2E4CA6]/40 bg-[#121D59]/60"
+                  ? "border-[#F26241]/60 bg-[#321F14] shadow-[0_0_20px_rgba(242,98,65,0.1)]"
+                  : "border-[#F26241]/20 bg-[#321F14]/60"
               }`}
             >
-              <h3 className="font-semibold text-[#e8eaf6] text-lg">{label}</h3>
-              <p className="text-2xl font-bold mt-2 text-[#EAF205]">
+              <h3 className="font-semibold text-[#FAF0EB] text-lg">{label}</h3>
+              <p className="text-2xl font-bold mt-2 text-[#F26241]">
                 {limits.price === 0 ? "Gratis" : `Rp${limits.price.toLocaleString("id-ID")}`}
               </p>
-              <ul className="mt-4 space-y-2 text-sm text-[#5983D9]">
+              <ul className="mt-4 space-y-2 text-sm text-[#A69A97]">
                 <li className="flex items-center gap-2">
                   <Check size={14} className="text-emerald-400" />
-                  Max {limits.maxSlates} paslon
+                  Max {limits.maxSlates} pasangan
                 </li>
                 <li className="flex items-center gap-2">
                   <Check size={14} className="text-emerald-400" />
@@ -92,7 +92,7 @@ export default function BillingPage() {
               </ul>
 
               {isCurrent ? (
-                <p className="mt-4 text-sm text-[#EAF205] font-medium">Paket aktif</p>
+                <p className="mt-4 text-sm text-[#F26241] font-medium">Paket aktif</p>
               ) : key !== "FREE" ? (
                 <Button
                   className="mt-4 w-full"
