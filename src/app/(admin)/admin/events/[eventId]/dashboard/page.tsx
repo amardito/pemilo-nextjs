@@ -13,6 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from "recharts";
 import type { Event } from "@/lib/types";
 
@@ -34,9 +35,12 @@ export default function DashboardPage() {
       ? Math.round((stats.voted_count / stats.total_voters) * 100)
       : 0;
 
+  const totalVotes = stats.votes_by_slate.reduce((sum, s) => sum + s.votes, 0);
+
   const chartData = stats.votes_by_slate.map((s) => ({
     name: `#${s.number} ${s.name}`,
     votes: s.votes,
+    percent: totalVotes > 0 ? Math.round((s.votes / totalVotes) * 100) : 0,
   }));
 
   const dotClassMap: Record<string, string> = {
@@ -79,19 +83,37 @@ export default function DashboardPage() {
         {chartData.length === 0 ? (
           <p className="text-[#A69A97] text-sm">Belum ada suara masuk</p>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F26241" opacity={0.2} />
-              <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#A69A97" }} />
-              <YAxis allowDecimals={false} tick={{ fill: "#A69A97" }} />
-              <Tooltip
-                contentStyle={{ background: "#261C16", border: "1px solid #F26241", borderRadius: "8px", color: "#FAF0EB" }}
-                labelStyle={{ color: "#F26241" }}
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 24, right: 16, left: 0, bottom: 8 }}
+              barCategoryGap="35%"
+              maxBarSize={120}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#F26241" opacity={0.15} vertical={false} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 12, fill: "#A69A97" }}
+                axisLine={{ stroke: "#F26241", opacity: 0.3 }}
+                tickLine={false}
               />
-              <Bar dataKey="votes" radius={[4, 4, 0, 0]}>
+              <YAxis
+                allowDecimals={false}
+                tick={{ fill: "#A69A97", fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+                width={36}
+              />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(242,98,65,0.08)" }} />
+              <Bar dataKey="votes" radius={[6, 6, 0, 0]}>
                 {chartData.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
+                <LabelList
+                  dataKey="votes"
+                  position="top"
+                  style={{ fill: "#FAF0EB", fontSize: 13, fontWeight: 600 }}
+                />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -137,6 +159,26 @@ export default function DashboardPage() {
           </ul>
         )}
       </div>
+    </div>
+  );
+}
+
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number; payload: { percent: number } }[]; label?: string }) {
+  if (!active || !payload || payload.length === 0) return null;
+  const item = payload[0];
+  const value = item.value;
+  const percent = item.payload.percent;
+  return (
+    <div className="rounded-xl border border-[#F26241]/60 bg-[#1e130e] px-4 py-3 shadow-lg">
+      <p className="text-sm font-semibold text-[#F26241] mb-1">{label}</p>
+      <p className="text-sm text-[#FAF0EB]">
+        <span className="text-[#A69A97]">Suara: </span>
+        <span className="font-bold">{value.toLocaleString("id-ID")}</span>
+      </p>
+      <p className="text-sm text-[#FAF0EB]">
+        <span className="text-[#A69A97]">Persentase: </span>
+        <span className="font-bold">{percent}%</span>
+      </p>
     </div>
   );
 }
