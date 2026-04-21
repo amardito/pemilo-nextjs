@@ -17,9 +17,7 @@ export default function EventLandingPage() {
   useEffect(() => {
     async function load() {
       try {
-        // Use the public event info from stats or a public endpoint
-        // For now we fetch stats which is publicly-ish accessible
-        const res = (await api.events.get(eventId)) as ApiSuccessResponse<Event>;
+        const res = (await api.public.getEvent(eventId)) as ApiSuccessResponse<Event>;
         setEvent(res.data as Event);
       } catch (err) {
         if (err instanceof ApiError) {
