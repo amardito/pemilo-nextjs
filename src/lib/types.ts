@@ -71,6 +71,16 @@ export interface SlatePublic {
   members: SlateMemberPublic[];
 }
 
+// ── Public Event (voter-facing) ──
+export interface PublicEvent {
+  id: string;
+  title: string;
+  description: string | null;
+  status: EventStatus;
+  opens_at: string | null;
+  closes_at: string | null;
+}
+
 // ── Voting ──
 export interface VotePrepareResponse {
   ok: boolean;
