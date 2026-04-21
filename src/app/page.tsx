@@ -131,8 +131,8 @@ export default function Home() {
       </section>
 
       {/* Social proof strip */}
-      <div className="border-y border-[#F26241]/30 bg-[#321F14]/40 py-4">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-10 gap-y-2 px-6 text-sm text-[#A69A97]">
+      <div className="border-y border-[#F26241]/30 bg-[#321F14]/40 py-5">
+        <div className="mx-auto grid max-w-4xl grid-cols-2 items-center justify-items-center gap-x-8 gap-y-3 px-6 text-sm text-[#A69A97] sm:grid-cols-5">
           <span>✅ Token satu-kali-pakai</span>
           <span>✅ Tidak perlu install aplikasi</span>
           <span>✅ Dukung hingga 1.500 pemilih</span>
