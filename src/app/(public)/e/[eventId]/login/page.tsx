@@ -51,21 +51,21 @@ export default function VoterLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 px-4 py-8">
-      <div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-6 shadow-2xl sm:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0E26] px-4 py-8">
+      <div className="w-full max-w-md space-y-6 rounded-2xl bg-[#121D59] border border-[#2E4CA6]/40 p-6 shadow-2xl sm:p-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Masuk sebagai Pemilih</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-[#e8eaf6]">Masuk sebagai Pemilih</h1>
+          <p className="mt-1 text-sm text-[#5983D9]">
             Masukkan token dan NIM untuk memilih
           </p>
-          <p className="mt-2 text-xs text-gray-400">
+          <p className="mt-2 text-xs text-[#5983D9]/60">
             Token diberikan oleh panitia. Gunakan token unik milikmu.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#5983D9] mb-1">
               Token
             </label>
             <Input
@@ -84,11 +84,11 @@ export default function VoterLoginPage() {
               autoFocus
               required
             />
-            <p className="mt-1 text-xs text-gray-400">8 karakter, huruf/angka</p>
+            <p className="mt-1 text-xs text-[#5983D9]/60">8 karakter, huruf/angka</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#5983D9] mb-1">
               NIM
             </label>
             <Input
@@ -101,7 +101,7 @@ export default function VoterLoginPage() {
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 p-2 rounded">
+            <p className="text-sm text-red-300 bg-red-900/30 border border-red-600/30 p-2 rounded-lg">
               {error}
             </p>
           )}

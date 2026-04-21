@@ -46,30 +46,30 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 md:grid md:grid-cols-2">
-      <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 p-10 text-white">
+    <div className="min-h-screen bg-[#0A0E26] md:grid md:grid-cols-2">
+      <div className="hidden md:flex flex-col justify-between bg-[#121D59] border-r border-[#2E4CA6]/40 p-10 text-[#e8eaf6]">
         <div>
-          <p className="text-2xl font-bold tracking-tight">Pemilo</p>
-          <p className="mt-3 text-sm text-blue-100">Platform pemilihan digital yang aman dan mudah digunakan.</p>
+          <p className="text-2xl font-extrabold tracking-tight text-[#EAF205]">Pemilo</p>
+          <p className="mt-3 text-sm text-[#5983D9]">Platform pemilihan digital yang aman dan mudah digunakan.</p>
         </div>
         <div className="space-y-4">
-          <h2 className="text-3xl font-extrabold leading-tight">Kelola pemilihan kampus dari satu dashboard</h2>
-          <ul className="space-y-2 text-sm text-blue-100">
+          <h2 className="text-3xl font-extrabold leading-tight text-[#e8eaf6]">Kelola pemilihan kampus dari satu dashboard</h2>
+          <ul className="space-y-2 text-sm text-[#5983D9]">
             <li>• Generate token unik satu-kali-pakai</li>
             <li>• Pantau turnout dan hasil secara realtime</li>
             <li>• Rekap hasil siap ekspor CSV</li>
           </ul>
         </div>
-        <p className="text-xs text-blue-200">© {new Date().getFullYear()} Pemilo</p>
+        <p className="text-xs text-[#5983D9]/60">© {new Date().getFullYear()} Pemilo</p>
       </div>
 
-      <div className="flex items-center justify-center px-4 py-8 md:px-8">
-        <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl shadow-gray-200/70 md:p-8">
+      <div className="flex items-center justify-center px-4 py-8 md:px-8 bg-[#0A0E26]">
+        <div className="w-full max-w-md rounded-2xl bg-[#121D59] border border-[#2E4CA6]/40 p-6 shadow-2xl shadow-black/40 md:p-8">
           <div className="mb-6 text-center md:hidden">
-            <p className="text-xl font-bold text-blue-600">Pemilo</p>
+            <p className="text-xl font-extrabold text-[#EAF205]">Pemilo</p>
           </div>
 
-          <div className="mb-5 rounded-lg bg-gray-100 p-1" role="tablist" aria-label="Mode autentikasi">
+          <div className="mb-5 rounded-xl bg-[#0A0E26] border border-[#2E4CA6]/40 p-1" role="tablist" aria-label="Mode autentikasi">
             <div className="grid grid-cols-2 gap-1">
               <button
                 type="button"
@@ -79,8 +79,8 @@ export default function AdminLoginPage() {
                   setIsRegister(false);
                   setError("");
                 }}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition ${
-                  !isRegister ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+                  !isRegister ? "bg-[#2E4CA6] text-[#e8eaf6] shadow-sm" : "text-[#5983D9] hover:text-[#e8eaf6]"
                 }`}
               >
                 Masuk
@@ -93,8 +93,8 @@ export default function AdminLoginPage() {
                   setIsRegister(true);
                   setError("");
                 }}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition ${
-                  isRegister ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+                  isRegister ? "bg-[#2E4CA6] text-[#e8eaf6] shadow-sm" : "text-[#5983D9] hover:text-[#e8eaf6]"
                 }`}
               >
                 Daftar
@@ -103,8 +103,8 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="mb-6 text-center">
-            <h1 className="text-2xl font-bold text-gray-900">{isRegister ? "Buat Akun Panitia" : "Masuk ke Dashboard"}</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-[#e8eaf6]">{isRegister ? "Buat Akun Panitia" : "Masuk ke Dashboard"}</h1>
+            <p className="mt-1 text-sm text-[#5983D9]">
               {isRegister ? "Daftarkan akun untuk mulai membuat event" : "Lanjutkan untuk mengelola event pemilihan"}
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-[#5983D9] mb-1">
                   Nama
                 </label>
                 <Input
@@ -124,7 +124,7 @@ export default function AdminLoginPage() {
               </div>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#5983D9] mb-1">
                 Email
               </label>
               <Input
@@ -136,7 +136,7 @@ export default function AdminLoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#5983D9] mb-1">
                 Password
               </label>
               <div className="relative">
@@ -152,7 +152,7 @@ export default function AdminLoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute inset-y-0 right-3 text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-3 text-[#5983D9] hover:text-[#e8eaf6]"
                   aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -161,7 +161,7 @@ export default function AdminLoginPage() {
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 p-2 rounded">
+              <p className="text-sm text-red-300 bg-red-900/30 border border-red-600/30 p-2 rounded-lg">
                 {error}
               </p>
             )}
