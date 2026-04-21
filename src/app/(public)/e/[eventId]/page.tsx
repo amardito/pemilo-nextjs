@@ -6,21 +6,28 @@ import { useEffect, useState } from "react";
 import { api, ApiError } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Event, ApiSuccessResponse } from "@/lib/types";
+import type { ApiSuccessResponse } from "@/lib/types";
+
+interface PublicEventInfo {
+  id: string;
+  title: string;
+  description?: string | null;
+  status: string;
+  opens_at?: string | null;
+  closes_at?: string | null;
+}
 
 export default function EventLandingPage() {
   const { eventId } = useParams<{ eventId: string }>();
-  const [event, setEvent] = useState<Event | null>(null);
+  const [event, setEvent] = useState<PublicEventInfo | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        // Use the public event info from stats or a public endpoint
-        // For now we fetch stats which is publicly-ish accessible
-        const res = (await api.events.get(eventId)) as ApiSuccessResponse<Event>;
-        setEvent(res.data as Event);
+        const res = (await api.public.getEvent(eventId)) as ApiSuccessResponse<PublicEventInfo>;
+        setEvent(res.data as PublicEventInfo);
       } catch (err) {
         if (err instanceof ApiError) {
           setError(err.message);

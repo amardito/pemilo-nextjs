@@ -130,6 +130,7 @@ export const api = {
   },
 
   public: {
+    getEvent: (eventId: string) => request(`/public/events/${eventId}`),
     prepare: (eventId: string, data: { token: string; nim: string }) =>
       request(`/public/events/${eventId}/vote/prepare`, { method: "POST", body: JSON.stringify(data) }),
     submit: (eventId: string, data: { token: string; nim: string; slate_id: string }) =>
