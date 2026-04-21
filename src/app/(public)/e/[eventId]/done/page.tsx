@@ -2,6 +2,8 @@
 
 import { CheckCircle } from "lucide-react";
 
+const CLOSE_FALLBACK_DELAY_MS = 120;
+
 export default function VoteDonePage() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 px-4 py-8 text-white">
@@ -22,7 +24,7 @@ export default function VoteDonePage() {
                 if (!document.hidden && window.history.length > 1) {
                   window.history.back();
                 }
-              }, 120);
+              }, CLOSE_FALLBACK_DELAY_MS);
             }}
             className="w-full rounded-lg bg-white px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >
