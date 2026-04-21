@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMe } from "@/lib/queries/events";
+import { useEvent, useMe } from "@/lib/queries/events";
 import { clearToken } from "@/lib/api";
-import { Users, BarChart3, FileText, CreditCard, Settings, LogOut } from "lucide-react";
+import { Users, BarChart3, FileText, CreditCard, Settings, LogOut, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function navItems(eventId: string) {
@@ -24,20 +24,21 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const { data, isLoading, isError } = useMe();
+  const match = pathname.match(/\/admin\/events\/([^/]+)/);
+  const eventId = match?.[1];
+  const { data: eventData } = useEvent(eventId ?? "");
+  const currentEventTitle = eventData?.data?.title;
+  const sidebarItems = eventId ? navItems(eventId) : [];
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted && !isLoading && isError) {
+    if (!isLoading && isError) {
       router.push("/login");
     }
-  }, [mounted, isLoading, isError, router]);
+  }, [isLoading, isError, router]);
 
-  if (!mounted || isLoading) {
+  if (isLoading) {
     return (
       <div suppressHydrationWarning className="flex min-h-screen items-center justify-center">
         <p className="text-gray-500">Memuat...</p>
@@ -47,18 +48,25 @@ export default function AdminLayout({
 
   if (isError) return null;
 
-  // Extract eventId from pathname
-  const match = pathname.match(/\/admin\/events\/([^/]+)/);
-  const eventId = match?.[1];
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top nav */}
       <header className="sticky top-0 z-40 border-b bg-white">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link href="/admin/events" className="font-bold text-lg text-blue-600">
-            Pemilo
-          </Link>
+          <div className="flex items-center gap-2">
+            {eventId && (
+              <button
+                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 md:hidden"
+                onClick={() => setMobileSidebarOpen(true)}
+                aria-label="Buka menu"
+              >
+                <Menu size={18} />
+              </button>
+            )}
+            <Link href="/admin/events" className="font-bold text-lg text-blue-600">
+              Pemilo
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-600">
               {data?.data?.name}
@@ -80,17 +88,23 @@ export default function AdminLayout({
       <div className="mx-auto max-w-7xl flex">
         {/* Sidebar (event-level pages only) */}
         {eventId && (
-          <aside className="hidden md:flex w-52 flex-col gap-1 border-r bg-white p-3 min-h-[calc(100vh-3.5rem)]">
-            {navItems(eventId).map((item) => {
+          <aside className="hidden md:flex w-56 flex-col gap-1 border-r bg-white p-3 min-h-[calc(100vh-3.5rem)]">
+            {currentEventTitle && (
+              <div className="mb-2 rounded-lg bg-blue-50 px-3 py-2">
+                <p className="text-xs uppercase tracking-wide text-blue-700">Event Aktif</p>
+                <p className="line-clamp-2 text-sm font-semibold text-blue-900">{currentEventTitle}</p>
+              </div>
+            )}
+            {sidebarItems.map((item) => {
               const active = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+                  className={`flex items-center gap-2 rounded-r-lg border-l-2 px-3 py-2 text-sm transition-colors ${
                     active
-                      ? "bg-blue-50 text-blue-700 font-medium"
-                      : "text-gray-600 hover:bg-gray-100"
+                      ? "border-blue-600 bg-blue-50 text-blue-700 font-medium"
+                      : "border-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
                   <item.icon size={16} />
@@ -102,8 +116,56 @@ export default function AdminLayout({
         )}
 
         {/* Main content */}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 p-3 md:p-6">{children}</main>
       </div>
+
+      {eventId && mobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMobileSidebarOpen(false)}
+            aria-label="Tutup menu"
+          />
+          <aside className="relative h-full w-72 max-w-[85vw] border-r bg-white p-4 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="font-semibold text-blue-600">Menu Event</p>
+              <button
+                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                onClick={() => setMobileSidebarOpen(false)}
+                aria-label="Tutup sidebar"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            {currentEventTitle && (
+              <div className="mb-3 rounded-lg bg-blue-50 px-3 py-2">
+                <p className="text-xs uppercase tracking-wide text-blue-700">Event Aktif</p>
+                <p className="line-clamp-2 text-sm font-semibold text-blue-900">{currentEventTitle}</p>
+              </div>
+            )}
+            <nav className="space-y-1">
+              {sidebarItems.map((item) => {
+                const active = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileSidebarOpen(false)}
+                    className={`flex items-center gap-2 rounded-r-lg border-l-2 px-3 py-2 text-sm transition-colors ${
+                      active
+                        ? "border-blue-600 bg-blue-50 text-blue-700 font-medium"
+                        : "border-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }`}
+                  >
+                    <item.icon size={16} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+        </div>
+      )}
     </div>
   );
 }

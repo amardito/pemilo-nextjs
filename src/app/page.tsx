@@ -48,28 +48,28 @@ const plans = [
     price: "Gratis",
     sub: "selamanya",
     highlight: false,
-    voters: "Maks. 100 pemilih",
-    features: ["1 event aktif", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil"],
+    voters: "Maks. 30 pemilih",
+    features: ["1 event aktif", "Maks. 2 paslon", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil"],
     cta: "Mulai Gratis",
     href: "/login",
   },
   {
     name: "Starter",
-    price: "Rp 49.000",
-    sub: "per event",
+    price: "Rp 79.000 / event",
+    sub: "sekali bayar",
     highlight: true,
-    voters: "Maks. 500 pemilih",
-    features: ["1 event aktif", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil", "Prioritas support"],
+    voters: "Maks. 200 pemilih",
+    features: ["1 event aktif", "Maks. 6 paslon", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil", "Prioritas support"],
     cta: "Pilih Starter",
     href: "/login",
   },
   {
     name: "Pro",
-    price: "Rp 99.000",
-    sub: "per event",
+    price: "Rp 149.000 / event",
+    sub: "sekali bayar",
     highlight: false,
-    voters: "Maks. 2.000 pemilih",
-    features: ["1 event aktif", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil", "Prioritas support", "Audit log lengkap"],
+    voters: "Maks. 1.500 pemilih",
+    features: ["1 event aktif", "Maks. 12 paslon", "Import CSV", "Token generator", "Dashboard realtime", "Ekspor hasil", "Prioritas support", "Audit log lengkap"],
     cta: "Pilih Pro",
     href: "/login",
   },
@@ -124,7 +124,7 @@ export default function Home() {
               Lihat Cara Kerja
             </a>
           </div>
-          <p className="text-xs text-blue-200">Gratis untuk hingga 100 pemilih. Tidak perlu kartu kredit.</p>
+          <p className="text-xs text-blue-200">Gratis untuk hingga 30 pemilih. Tidak perlu kartu kredit.</p>
         </div>
       </section>
 
@@ -133,7 +133,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-10 gap-y-2 px-6 text-sm text-gray-500">
           <span>✅ Token satu-kali-pakai</span>
           <span>✅ Tidak perlu install aplikasi</span>
-          <span>✅ Bisa ratusan pemilih sekaligus</span>
+          <span>✅ Dukung hingga 1.500 pemilih</span>
           <span>✅ Live dashboard</span>
           <span>✅ Ekspor CSV otomatis</span>
         </div>
