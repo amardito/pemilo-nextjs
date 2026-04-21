@@ -21,7 +21,7 @@ export default function VoteDonePage() {
             onClick={() => {
               window.close();
               setTimeout(() => {
-                if (!document.hidden && window.history.length > 1) {
+                if (window.history.length > 1) {
                   window.history.back();
                 }
               }, CLOSE_FALLBACK_DELAY_MILLISECONDS);
