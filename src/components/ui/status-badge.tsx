@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 import type { EventStatus } from "@/lib/types";
 
 const statusStyles: Record<EventStatus, string> = {
-  DRAFT: "bg-[#121D59] text-[#5983D9] border border-[#2E4CA6]",
+  DRAFT: "bg-[#321F14] text-[#A69A97] border border-[#F26241]/40",
   SCHEDULED: "bg-yellow-900/30 text-yellow-300 border border-yellow-600/40",
   OPEN: "bg-emerald-900/30 text-emerald-300 border border-emerald-600/40",
   CLOSED: "bg-red-900/30 text-red-300 border border-red-600/40",
