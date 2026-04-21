@@ -68,9 +68,9 @@ export default function VoterLoginPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Token
             </label>
-              <Input
-                value={token}
-                onChange={(e) =>
+            <Input
+              value={token}
+              onChange={(e) =>
                 setToken(
                   e.target.value
                     .toUpperCase()
@@ -78,12 +78,12 @@ export default function VoterLoginPage() {
                     .slice(0, 8)
                 )
               }
-                placeholder="8 karakter (huruf & angka)"
-                maxLength={8}
-                className="h-12 border-2 font-mono tracking-[0.35em] text-center text-xl uppercase"
-                autoFocus
-                required
-              />
+              placeholder="8 karakter (huruf & angka)"
+              maxLength={8}
+              className="h-12 border-2 font-mono tracking-[0.35em] text-center text-xl uppercase"
+              autoFocus
+              required
+            />
             <p className="mt-1 text-xs text-gray-400">8 karakter, huruf/angka</p>
           </div>
 

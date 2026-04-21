@@ -7,7 +7,7 @@ export default function VoteDonePage() {
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 px-4 py-8 text-white">
       <div className="flex flex-1 items-center justify-center">
         <div className="w-full max-w-md space-y-5 rounded-2xl border border-white/20 bg-white/10 p-8 text-center shadow-2xl backdrop-blur-sm">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-emerald-600 shadow-lg animate-bounce">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-emerald-600 shadow-lg motion-safe:animate-bounce motion-reduce:animate-none">
             <CheckCircle size={44} />
           </div>
           <h1 className="text-3xl font-extrabold">Suara Kamu Berhasil Dicatat! 🎉</h1>
