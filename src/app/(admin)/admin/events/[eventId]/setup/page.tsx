@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Copy, Check } from "lucide-react";
 import type { Event } from "@/lib/types";
 
 export default function EventSetupPage() {
@@ -21,6 +22,15 @@ export default function EventSetupPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  function handleCopyLink() {
+    const url = `${window.location.origin}/e/${eventId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    });
+  }
 
   useEffect(() => {
     if (event) {
@@ -100,9 +110,23 @@ export default function EventSetupPage() {
 
       <div className="rounded-2xl border border-[#F26241]/30 bg-[#321F14] p-6">
         <h2 className="font-semibold text-[#FAF0EB] mb-2">Link Voting Publik</h2>
-        <code className="block rounded-xl bg-[#261C16] border border-[#F26241]/20 p-2 text-sm break-all text-[#A69A97]">
-          {typeof window !== "undefined" ? `${window.location.origin}/e/${eventId}` : `/e/${eventId}`}
-        </code>
+        <div className="flex items-center gap-2">
+          <code className="flex-1 rounded-xl bg-[#261C16] border border-[#F26241]/20 p-2 text-sm break-all text-[#A69A97]">
+            {typeof window !== "undefined" ? `${window.location.origin}/e/${eventId}` : `/e/${eventId}`}
+          </code>
+          <button
+            type="button"
+            onClick={handleCopyLink}
+            title="Salin link"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#F26241]/30 bg-[#261C16] px-3 py-2 text-sm text-[#A69A97] hover:bg-[#321F14] hover:text-[#FAF0EB] transition-colors"
+          >
+            {linkCopied ? (
+              <><Check size={15} className="text-green-400" /><span className="text-green-400">Tersalin</span></>
+            ) : (
+              <><Copy size={15} /><span>Salin</span></>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
